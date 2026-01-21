@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Web Creator</title>
+    <meta name="description" content="ビジネス課題を解決するWebサイト制作。制作実績一覧。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- 変更箇所：ここにあなたのGitHub IDを入れてください -->
+    <script>
+        // ★重要★ あなたのGitHubユーザー名に書き換えてください（例: 'flankel'）
+        const GITHUB_ID = 'flankel'; 
+    </script>
+
+    <!-- ヘッダー -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="font-bold text-xl tracking-tight">Portfolio.</div>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+                <a href="#works" class="hover:text-black transition">Works</a>
+                <a href="#skills" class="hover:text-black transition">Skills</a>
+                <a href="#contact" class="hover:text-black transition">Contact</a>
+            </nav>
+            <a href="#contact" class="bg-black text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-gray-800 transition">お問い合わせ</a>
+        </div>
+    </header>
+
+    <!-- ヒーロー -->
+    <section class="py-24 md:py-32 px-6 bg-white">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-4 block">Web Creator / Developer</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 leading-tight">
+                ビジネスの成長を加速させる<br>Webサイトを構築します。
+            </h1>
+            <p class="text-slate-500 leading-relaxed mb-10 max-w-2xl mx-auto">
+                コーポレートサイトからEC、Webサービスまで。<br>
+                「伝わるデザイン」と「確かな技術」で、目的に合わせた最適なWebサイトをご提案します。
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#works" class="bg-slate-900 text-white px-8 py-4 rounded-lg font-bold hover:bg-slate-700 transition">
+                    制作実績を見る
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 実績一覧 (Works) -->
+    <section id="works" class="py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Selected Works</h2>
+                    <p class="text-slate-500">制作したWebサイトのサンプル一覧（10件）</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+                <!-- JavaScriptでここに記事が生成されます -->
+            </div>
+        </div>
+    </section>
+
+    <!-- スキルセット -->
+    <section id="skills" class="py-24 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-12">Tech Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="p-6 bg-slate-50 rounded-xl">
+                    <p class="font-bold text-xl mb-2">HTML5</p>
+                    <p class="text-xs text-slate-500">セマンティックなマークアップ</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-xl">
+                    <p class="font-bold text-xl mb-2">CSS3</p>
+                    <p class="text-xs text-slate-500">モダンなレイアウト構築</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-xl">
+                    <p class="font-bold text-xl mb-2">Tailwind CSS</p>
+                    <p class="text-xs text-slate-500">高速なスタイリング</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-xl">
+                    <p class="font-bold text-xl mb-2">JavaScript</p>
+                    <p class="text-xs text-slate-500">動的なUIの実装</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer id="contact" class="bg-slate-900 text-white py-20 px-6 text-center">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold mb-6">Let's work together.</h2>
+            <p class="text-slate-400 mb-10">
+                お仕事のご依頼、ご相談などお気軽にご連絡ください。
+            </p>
+            <a href="mailto:your-email@example.com" class="inline-block bg-indigo-600 px-10 py-4 rounded-lg font-bold hover:bg-indigo-500 transition">
+                お問い合わせはこちら
+            </a>
+            <div class="mt-16 text-xs text-slate-600">
+                &copy; 2024 Portfolio. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 実績データの生成スクリプト -->
+    <script>
+        // 10個のサイトデータ
+        const projects = [
+            {
+                name: "TaskFlow",
+                repo: "TaskFlow",
+                category: "SaaS / IT Service",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                desc: "業務効率化ツールのランディングページ。信頼感と機能性を重視したデザイン。"
+            },
+            {
+                name: "Axis Strategy",
+                repo: "Axis-Strategy",
+                category: "Consulting / Corporate",
+                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+                desc: "経営コンサルティングファームの公式サイト。重厚感と知性を表現。"
+            },
+            {
+                name: "Noble House",
+                repo: "Noble-House",
+                category: "Real Estate / Luxury",
+                image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+                desc: "高級注文住宅ブランドのサイト。余白を活かしたラグジュアリーな表現。"
+            },
+            {
+                name: "Minato Medical",
+                repo: "Minato-Medical-Clinic",
+                category: "Medical / Clinic",
+                image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80",
+                desc: "都心型クリニックのサイト。清潔感と予約のしやすさを意識したUI。"
+            },
+            {
+                name: "Blue Harbor Coffee",
+                repo: "Blue-Harbor-Coffee",
+                category: "Cafe / SPA Like",
+                image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80",
+                desc: "ロースタリーカフェのサイト。ページ遷移のようなスムーズな操作性を実装。"
+            },
+            {
+                name: "VANGUARD",
+                repo: "VANGUARD-TECHNOLOGIES",
+                category: "Recruit / Tech",
+                image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+                desc: "IT企業の採用特化サイト。黒とネオンカラーを用いた勢いのあるデザイン。"
+            },
+            {
+                name: "NEXUS WORKSPACE",
+                repo: "NEXUS-WORKSPACE",
+                category: "Co-working / Facility",
+                image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
+                desc: "コワーキングスペースの紹介サイト。施設の魅力を伝える横スクロールギャラリー。"
+            },
+            {
+                name: "INNOVATION SUMMIT",
+                repo: "INNOVATION-SUMMIT-2026",
+                category: "Event / Landing Page",
+                image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+                desc: "ビジネスカンファレンスのLP。カウントダウン機能で期待感を醸成。"
+            },
+            {
+                name: "SkillStream",
+                repo: "SkillStream",
+                category: "Education / EdTech",
+                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
+                desc: "オンラインスクールのサイト。ポップで親しみやすい信頼感のあるデザイン。"
+            },
+            {
+                name: "TRANS-WORLD",
+                repo: "TRANS-WORLD",
+                category: "Logistics / B2B",
+                image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+                desc: "グローバル物流企業のサイト。世界規模のダイナミックさとスピード感を表現。"
+            }
+        ];
+
+        const grid = document.getElementById('portfolio-grid');
+
+        projects.forEach(project => {
+            const url = `https://${GITHUB_ID}.github.io/${project.repo}/`;
+            
+            const card = `
+                <article class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 card-hover transition duration-300 flex flex-col h-full">
+                    <a href="${url}" target="_blank" class="block aspect-video bg-gray-200 relative overflow-hidden group">
+                        <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                            <span class="text-white font-bold border border-white px-4 py-2 rounded-full">View Site</span>
+                        </div>
+                    </a>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-bold text-indigo-600 mb-2 uppercase tracking-wide">${project.category}</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">
+                            <a href="${url}" target="_blank" class="hover:text-indigo-600 transition">${project.name}</a>
+                        </h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-4 flex-grow">${project.desc}</p>
+                        <a href="${url}" target="_blank" class="text-sm font-bold text-slate-900 border-b border-slate-300 pb-0.5 inline-block hover:border-black transition w-max">
+                            デモサイトを見る &rarr;
+                        </a>
+                    </div>
+                </article>
+            `;
+            grid.innerHTML += card;
+        });
+    </script>
+</body>
+</html>
