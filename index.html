@@ -14,9 +14,8 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
 
-    <!-- 変更箇所：ここにあなたのGitHub IDを入れてください -->
+    <!-- GitHub IDの設定 -->
     <script>
-        // ★重要★ あなたのGitHubユーザー名に書き換えてください（例: 'flankel'）
         const GITHUB_ID = 'flankel'; 
     </script>
 
@@ -52,7 +51,7 @@
         </div>
     </section>
 
-    <!-- 実績一覧 (Works) -->
+    <!-- 実績一覧 -->
     <section id="works" class="py-24 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-end mb-12">
@@ -63,7 +62,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
-                <!-- JavaScriptでここに記事が生成されます -->
+                <!-- JSで生成されます -->
             </div>
         </div>
     </section>
@@ -93,96 +92,67 @@
         </div>
     </section>
 
-    <!-- フッター -->
-    <footer id="contact" class="bg-slate-900 text-white py-20 px-6 text-center">
-        <div class="max-w-2xl mx-auto">
-            <h2 class="text-3xl font-bold mb-6">Let's work together.</h2>
-            <p class="text-slate-400 mb-10">
-                お仕事のご依頼、ご相談などお気軽にご連絡ください。
-            </p>
-            <a href="mailto:your-email@example.com" class="inline-block bg-indigo-600 px-10 py-4 rounded-lg font-bold hover:bg-indigo-500 transition">
-                お問い合わせはこちら
-            </a>
-            <div class="mt-16 text-xs text-slate-600">
-                &copy; 2024 Portfolio. All Rights Reserved.
+    <!-- ▼▼▼ お問い合わせフォーム（機能付き） ▼▼▼ -->
+    <section id="contact" class="bg-slate-900 text-white py-24 px-6">
+        <div class="max-w-xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Contact Me</h2>
+                <p class="text-slate-400">
+                    お仕事のご依頼、ご相談などお気軽にご連絡ください。<br>
+                    以下のフォームよりメッセージを送信できます。
+                </p>
             </div>
+
+            <!-- 
+               ★重要★ 
+               action="ここにFormspreeのURLを貼り付ける" に書き換えてください。
+            -->
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="space-y-6">
+                
+                <!-- お名前 -->
+                <div>
+                    <label class="block text-sm font-bold mb-2">お名前</label>
+                    <input type="text" name="name" required class="w-full px-4 py-3 rounded bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 transition" placeholder="山田 太郎">
+                </div>
+
+                <!-- メールアドレス -->
+                <div>
+                    <label class="block text-sm font-bold mb-2">メールアドレス</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 rounded bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 transition" placeholder="email@example.com">
+                </div>
+
+                <!-- メッセージ -->
+                <div>
+                    <label class="block text-sm font-bold mb-2">お問い合わせ内容</label>
+                    <textarea name="message" rows="5" required class="w-full px-4 py-3 rounded bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 transition" placeholder="ご相談内容をご記入ください"></textarea>
+                </div>
+
+                <!-- 送信ボタン -->
+                <button type="submit" class="w-full bg-indigo-600 py-4 rounded-lg font-bold text-white hover:bg-indigo-500 transition shadow-lg transform hover:-translate-y-1">
+                    送信する
+                </button>
+            </form>
+
         </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-500 py-8 text-center text-xs">
+        &copy; 2024 Portfolio. All Rights Reserved.
     </footer>
 
     <!-- 実績データの生成スクリプト -->
     <script>
-        // 10個のサイトデータ
         const projects = [
-            {
-                name: "TaskFlow",
-                repo: "TaskFlow",
-                category: "SaaS / IT Service",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-                desc: "業務効率化ツールのランディングページ。信頼感と機能性を重視したデザイン。"
-            },
-            {
-                name: "Axis Strategy",
-                repo: "Axis-Strategy",
-                category: "Consulting / Corporate",
-                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
-                desc: "経営コンサルティングファームの公式サイト。重厚感と知性を表現。"
-            },
-            {
-                name: "Noble House",
-                repo: "Noble-House",
-                category: "Real Estate / Luxury",
-                image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
-                desc: "高級注文住宅ブランドのサイト。余白を活かしたラグジュアリーな表現。"
-            },
-            {
-                name: "Minato Medical",
-                repo: "Minato-Medical-Clinic",
-                category: "Medical / Clinic",
-                image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80",
-                desc: "都心型クリニックのサイト。清潔感と予約のしやすさを意識したUI。"
-            },
-            {
-                name: "Blue Harbor Coffee",
-                repo: "Blue-Harbor-Coffee",
-                category: "Cafe / SPA Like",
-                image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80",
-                desc: "ロースタリーカフェのサイト。ページ遷移のようなスムーズな操作性を実装。"
-            },
-            {
-                name: "VANGUARD",
-                repo: "VANGUARD-TECHNOLOGIES",
-                category: "Recruit / Tech",
-                image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
-                desc: "IT企業の採用特化サイト。黒とネオンカラーを用いた勢いのあるデザイン。"
-            },
-            {
-                name: "NEXUS WORKSPACE",
-                repo: "NEXUS-WORKSPACE",
-                category: "Co-working / Facility",
-                image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
-                desc: "コワーキングスペースの紹介サイト。施設の魅力を伝える横スクロールギャラリー。"
-            },
-            {
-                name: "INNOVATION SUMMIT",
-                repo: "INNOVATION-SUMMIT-2026",
-                category: "Event / Landing Page",
-                image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-                desc: "ビジネスカンファレンスのLP。カウントダウン機能で期待感を醸成。"
-            },
-            {
-                name: "SkillStream",
-                repo: "SkillStream",
-                category: "Education / EdTech",
-                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
-                desc: "オンラインスクールのサイト。ポップで親しみやすい信頼感のあるデザイン。"
-            },
-            {
-                name: "TRANS-WORLD",
-                repo: "TRANS-WORLD",
-                category: "Logistics / B2B",
-                image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
-                desc: "グローバル物流企業のサイト。世界規模のダイナミックさとスピード感を表現。"
-            }
+            { name: "TaskFlow", repo: "TaskFlow", category: "SaaS / IT Service", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80", desc: "業務効率化ツールのLP。" },
+            { name: "Axis Strategy", repo: "Axis-Strategy", category: "Consulting", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80", desc: "経営コンサルティングの公式サイト。" },
+            { name: "Noble House", repo: "Noble-House", category: "Real Estate", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80", desc: "高級注文住宅のブランドサイト。" },
+            { name: "Minato Medical", repo: "Minato-Medical-Clinic", category: "Medical", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80", desc: "都心型クリニックのサイト。" },
+            { name: "Blue Harbor Coffee", repo: "Blue-Harbor-Coffee", category: "Cafe", image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80", desc: "ロースタリーカフェのサイト。" },
+            { name: "VANGUARD", repo: "VANGUARD-TECHNOLOGIES", category: "Recruit", image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80", desc: "IT企業の採用サイト。" },
+            { name: "NEXUS WORKSPACE", repo: "NEXUS-WORKSPACE", category: "Co-working", image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80", desc: "コワーキングスペースの紹介。" },
+            { name: "INNOVATION SUMMIT", repo: "INNOVATION-SUMMIT-2026", category: "Event", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80", desc: "ビジネスカンファレンスのLP。" },
+            { name: "SkillStream", repo: "SkillStream", category: "Education", image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", desc: "オンラインスクールのLP。" },
+            { name: "TRANS-WORLD", repo: "TRANS-WORLD", category: "Logistics", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80", desc: "グローバル物流企業のサイト。" }
         ];
 
         const grid = document.getElementById('portfolio-grid');
