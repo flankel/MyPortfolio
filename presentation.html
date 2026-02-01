@@ -68,13 +68,13 @@
         </button>
     </footer>
 
-    <script>
+<script>
         // ▼▼▼ データ定義 ▼▼▼
         
         const urlParams = new URLSearchParams(window.location.search);
         const presentationId = urlParams.get('id') || 'music-study';
 
-        // index.htmlと同じ画像データを定義（確実に表示させるため）
+        // index.htmlと同じ基本設定
         const presentationsMeta = {
             'music-study': { 
                 title: "流麗な音楽スタディで目指せるスライド", 
@@ -130,16 +130,26 @@
 
         const currentMeta = presentationsMeta[presentationId] || presentationsMeta['music-study'];
 
-        // 文脈に応じた画像のURLリスト（Unsplash固定ID）
-        const contextImages = {
-            'analysis': "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // グラフ、分析
-            'people': "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",   // 人々、議論
-            'design': "https://images.unsplash.com/photo-1509395062549-057d36931602?w=800&q=80",   // デザイン、スケッチ
-            'tech': "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",     // PC、コード
-            'business': "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", // オフィス、握手
-            'money': "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",    // 予算、計算
-            'future': "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80" // 未来、抽象
-        };
+        // 各スライドのテーマに合わせた画像のリスト（チャートエリアに表示する用）
+        const slideImages = [
+            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // 1. 市場分析（グラフ）
+            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80", // 2. インサイト（会議）
+            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80", // 3. ペルソナ（人々）
+            "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80", // 4. ジャーニー（付箋）
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", // 5. コンセプト（抽象・テック）
+            "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&q=80", // 6. UI/UX（ワイヤーフレーム）
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", // 7. 技術（コード）
+            "https://images.unsplash.com/photo-1509395062549-057d36931602?w=800&q=80", // 8. プロトタイプ（デザイン）
+            "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80", // 9. 競合比較（PC上のグラフ）
+            "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80", // 10. 差別化（チェス・戦略）
+            "https://images.unsplash.com/photo-1535957998253-26ae1ef29506?w=800&q=80", // 11. ビジネスモデル（オフィス）
+            "https://images.unsplash.com/photo-1579621970563-ebec7560eb3e?w=800&q=80", // 12. 収益化（植物とコイン）
+            "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80", // 13. マーケティング（分析画面）
+            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80", // 14. リスク（戦略・書類）
+            "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", // 15. 運用体制（チーム）
+            "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80", // 16. スケジュール（カレンダー）
+            "https://images.unsplash.com/photo-1554224155-9ffd4cd95525?w=800&q=80"  // 17. 予算（計算機）
+        ];
 
         // ▼▼▼ スライド生成ロジック ▼▼▼
 
@@ -164,97 +174,84 @@
                         </div>
                     </div>
                     <div class="w-1/2 bg-gray-100 relative overflow-hidden">
-                        <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[20s] hover:scale-110" style="transform: scale(1.05);" alt="Hero">
+                        <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover" alt="Hero">
                         <div class="absolute inset-0 bg-slate-900/10"></div>
                     </div>
                 </div>
             `);
 
-            // 2. 目次 (画像なし、テキスト中心)
+            // 2. 目次
             slides.push(`
-                <div class="h-full p-12 md:p-16 relative overflow-hidden bg-slate-50">
-                    <div class="absolute -right-20 -top-20 w-96 h-96 bg-gray-200 rounded-full opacity-50 blur-3xl"></div>
-                    <div class="relative z-10 h-full flex flex-col justify-center max-w-3xl">
-                        <h2 class="text-4xl font-black text-slate-900 mb-12">Agenda</h2>
-                        <div class="grid gap-6">
-                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
-                                <span class="text-2xl font-black ${meta.color} w-12">01</span>
-                                <span class="text-xl font-bold text-slate-700">現状の課題とプロジェクト背景</span>
+                <div class="h-full p-12 md:p-16 relative overflow-hidden bg-slate-50 flex flex-col justify-center items-center">
+                    <div class="absolute right-0 top-0 w-1/2 h-full bg-white skew-x-12 origin-top-right"></div>
+                    <div class="relative z-10 w-full max-w-4xl">
+                        <h2 class="text-4xl font-black text-slate-900 mb-12 border-b-4 ${meta.accent} inline-block pb-2">Agenda</h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
+                                <div class="flex items-center gap-4"><span class="text-3xl font-bold ${meta.color}">01</span><span class="text-xl font-bold text-slate-700">現状の課題と背景</span></div>
+                                <div class="flex items-center gap-4"><span class="text-3xl font-bold ${meta.color}">02</span><span class="text-xl font-bold text-slate-700">提案するソリューション</span></div>
+                                <div class="flex items-center gap-4"><span class="text-3xl font-bold ${meta.color}">03</span><span class="text-xl font-bold text-slate-700">市場調査とデータ分析</span></div>
                             </div>
-                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
-                                <span class="text-2xl font-black ${meta.color} w-12">02</span>
-                                <span class="text-xl font-bold text-slate-700">提案するコアソリューション</span>
-                            </div>
-                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
-                                <span class="text-2xl font-black ${meta.color} w-12">03</span>
-                                <span class="text-xl font-bold text-slate-700">市場分析とターゲットインサイト</span>
-                            </div>
-                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
-                                <span class="text-2xl font-black ${meta.color} w-12">04</span>
-                                <span class="text-xl font-bold text-slate-700">実装計画とロードマップ</span>
-                            </div>
-                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
-                                <span class="text-2xl font-black ${meta.color} w-12">05</span>
-                                <span class="text-xl font-bold text-slate-700">収支計画・KPI設定</span>
+                            <div class="space-y-6">
+                                <div class="flex items-center gap-4"><span class="text-3xl font-bold ${meta.color}">04</span><span class="text-xl font-bold text-slate-700">具体的なデザイン戦略</span></div>
+                                <div class="flex items-center gap-4"><span class="text-3xl font-bold ${meta.color}">05</span><span class="text-xl font-bold text-slate-700">収益計画とロードマップ</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
             `);
 
-            // 3〜19. コンテンツスライド（画像付き）
-            const contents = [
-                { title: "市場背景の分析", img: contextImages.analysis, text: "市場規模は年々拡大傾向にあり、特にデジタル分野での成長が顕著です。競合他社の動向を分析し、参入障壁と機会を特定しました。" },
-                { title: "ユーザーインサイト", img: contextImages.people, text: "ターゲットユーザーへのインタビューから、既存サービスに対する不満と潜在的なニーズが明らかになりました。" },
-                { title: "ペルソナ設定", img: contextImages.people, text: "メインとなるペルソナを設定し、行動特性や価値観を詳細に定義。共感を呼ぶサービス設計の基礎とします。" },
-                { title: "カスタマージャーニー", img: contextImages.design, text: "認知から利用、継続に至るまでのユーザー体験を可視化。ペインポイントを解消する施策を各フェーズに配置しました。" },
-                { title: "コアコンセプト", img: contextImages.future, text: "「テクノロジーで人々の生活を豊かに」を軸に、シンプルかつ革新的な価値提案を行います。" },
-                { title: "UI/UXデザイン方針", img: contextImages.design, text: "直感的で学習コストの低いインターフェースを採用。アクセシビリティにも配慮したユニバーサルデザインを目指します。" },
-                { title: "技術スタック選定", img: contextImages.tech, text: "スケーラビリティと開発効率を重視し、モダンなフレームワークを採用。将来的な機能拡張にも柔軟に対応可能です。" },
-                { title: "プロトタイプ検証", img: contextImages.tech, text: "初期プロトタイプを用いたユーザビリティテストを実施。フィードバックを即座に製品に反映させるアジャイルな開発体制です。" },
-                { title: "競合他社比較", img: contextImages.analysis, text: "主要な競合3社との機能比較を行い、当社の優位性を明確化。価格競争ではなく価値提供での差別化を図ります。" },
-                { title: "差別化要因", img: contextImages.future, text: "独自アルゴリズムによるパーソナライズ機能が最大の強みです。他社が模倣困難な技術的優位性を保持しています。" },
-                { title: "ビジネスモデル", img: contextImages.business, text: "サブスクリプションモデルを基本としつつ、エンタープライズ向けのカスタマイズプランも用意。安定した収益基盤を構築します。" },
-                { title: "収益化計画", img: contextImages.money, text: "サービス開始後6ヶ月での黒字化を計画。初期投資の回収期間は1.5年を見込んでいます。" },
-                { title: "マーケティング戦略", img: contextImages.business, text: "SNSとオウンドメディアを活用したコンテンツマーケティングを展開。オーガニック流入の最大化を目指します。" },
-                { title: "リスク分析", img: contextImages.analysis, text: "技術的負債、法規制の変化、競合の新規参入などのリスク要因を洗い出し、それぞれの対策案を策定済みです。" },
-                { title: "運用体制", img: contextImages.people, text: "開発、デザイン、マーケティング、サポートの各部門が連携。迅速な意思決定が可能なプロジェクトチームを組成します。" },
-                { title: "スケジュール", img: contextImages.business, text: "要件定義からリリースまで6ヶ月の工程を予定。マイルストーンごとの進捗確認を徹底し、遅延リスクを最小化します。" },
-                { title: "予算計画", img: contextImages.money, text: "開発費、広告宣伝費、人件費の配分を最適化。ROIを最大化するための資源配分を行います。" }
+            // 3〜19. コンテンツスライド（画像埋め込み）
+            const topics = [
+                "市場背景の分析", "ユーザーインサイト", "ペルソナ設定", "カスタマージャーニー",
+                "コアコンセプト", "UI/UXデザイン方針", "技術スタック選定", "プロトタイプ検証",
+                "競合他社比較", "差別化要因", "ビジネスモデル", "収益化計画",
+                "マーケティング戦略", "リスク分析", "運用体制", "スケジュール", "予算計画"
             ];
 
-            contents.forEach((item, i) => {
-                // 偶数・奇数でレイアウトを反転させる
-                const isEven = i % 2 === 0;
-                const orderText = isEven ? 'order-1' : 'order-2';
-                const orderImg = isEven ? 'order-2' : 'order-1';
-
+            topics.forEach((topic, index) => {
+                // そのトピックに対応する画像URLを取得
+                const chartImage = slideImages[index] || meta.mainImage;
+                
                 slides.push(`
-                    <div class="flex h-full">
-                        <div class="w-1/2 p-12 flex flex-col justify-center bg-white ${orderText}">
-                            <div class="flex items-center gap-4 mb-6">
-                                <span class="text-sm font-bold text-slate-300">0${i + 3}</span>
-                                <div class="h-px bg-slate-200 flex-grow"></div>
-                            </div>
-                            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 leading-snug">${item.title}</h2>
-                            <p class="text-slate-600 leading-relaxed text-sm md:text-base mb-8">
-                                ${item.text}<br><br>
-                                私たちの分析によれば、このアプローチが最も効果的であり、持続可能な成長をもたらすと確信しています。
-                            </p>
-                            <ul class="space-y-2 text-sm text-slate-500">
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 ${meta.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    重要ポイント確認済み
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 ${meta.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    データによる裏付けあり
-                                </li>
-                            </ul>
+                    <div class="h-full flex flex-col p-8 md:p-12">
+                        <div class="flex justify-between items-end border-b border-gray-100 pb-4 mb-8 shrink-0">
+                            <h2 class="text-2xl font-bold ${meta.color}">${topic}</h2>
+                            <span class="text-4xl font-black text-gray-100">0${index + 1}</span>
                         </div>
-                        <div class="w-1/2 bg-gray-100 relative ${orderImg}">
-                            <img src="${item.img}" class="absolute inset-0 w-full h-full object-cover" alt="${item.title}">
-                            <div class="absolute inset-0 bg-slate-900/5 mix-blend-multiply"></div>
+                        <div class="grid grid-cols-2 gap-8 h-full overflow-hidden">
+                            
+                            <!-- 左側：テキストエリア -->
+                            <div class="bg-slate-50 rounded-xl p-8 border border-slate-100 flex flex-col justify-center">
+                                <h3 class="font-bold text-slate-800 mb-6 text-xl">主要なインサイト</h3>
+                                <p class="text-slate-600 leading-relaxed mb-6">
+                                    ${topic}に関する詳細な検討結果をここに提示します。<br>
+                                    現状のデータ分析に基づき、以下の3点が重要なポイントとして挙げられます。
+                                </p>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-3 text-sm text-slate-700">
+                                        <svg class="w-5 h-5 ${meta.color} mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>課題に対する定量的アプローチ</span>
+                                    </li>
+                                    <li class="flex items-start gap-3 text-sm text-slate-700">
+                                        <svg class="w-5 h-5 ${meta.color} mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>競合優位性の確保</span>
+                                    </li>
+                                    <li class="flex items-start gap-3 text-sm text-slate-700">
+                                        <svg class="w-5 h-5 ${meta.color} mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>持続可能な成長モデル</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- 右側：チャート/画像エリア（ここを修正しました） -->
+                            <div class="rounded-xl overflow-hidden shadow-lg relative group border border-gray-200">
+                                <img src="${chartImage}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" alt="${topic} Chart">
+                                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded text-xs font-bold text-slate-600 shadow-sm">
+                                    FIG. 1-${index + 1}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 `);
@@ -267,8 +264,8 @@
                     <div class="relative z-10 max-w-2xl px-6">
                         <h2 class="text-5xl font-black mb-8 tracking-tight">Thank You.</h2>
                         <p class="text-slate-300 mb-12 text-lg leading-relaxed">
-                            本プロジェクトにご関心をお寄せいただき、<br>誠にありがとうございました。<br>
-                            詳細な資料やディスカッションについては、<br>下記よりお気軽にお問い合わせください。
+                            ご清聴ありがとうございました。<br>
+                            本プロジェクトの詳細な資料については、<br>下記よりお気軽にお問い合わせください。
                         </p>
                         <a href="index.html#contact" class="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition shadow-xl hover:scale-105 duration-300">
                             <span>お問い合わせはこちら</span>
@@ -292,11 +289,9 @@
         const counter = document.getElementById('slide-counter');
         const progressBar = document.getElementById('progress-bar');
         const footerCounter = document.getElementById('current-slide-footer');
-        const footerTitle = document.getElementById('footer-title');
         const titleEl = document.getElementById('presentation-title');
 
         titleEl.textContent = currentMeta.title;
-        footerTitle.textContent = currentMeta.title;
         document.title = `${currentMeta.title} | Slide Viewer`;
 
         function updateSlide() {
@@ -315,14 +310,12 @@
                 prevBtn.disabled = currentIndex === 0;
                 nextBtn.disabled = currentIndex === slidesData.length - 1;
                 
-                // 最後のスライドだけNextボタンの文言を変える（オプション）
                 if (currentIndex === slidesData.length - 1) {
                     nextBtn.innerHTML = `Finish`;
                 } else {
                     nextBtn.innerHTML = `Next <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
                 }
-
-            }, 200); // 遷移時間を少し短くしてサクサク感アップ
+            }, 200);
         }
 
         updateSlide();
@@ -354,7 +347,6 @@
                 }
             }
         });
-
     </script>
 </body>
 </html>
