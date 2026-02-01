@@ -14,46 +14,46 @@
             perspective: 1000px;
         }
         .slide-content {
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* スライド内の装飾 */
-        .slide-bg-pattern {
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 20px 20px;
+        /* テキストの選択防止（プレゼンっぽくするため） */
+        .no-select {
+            user-select: none;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden">
+<body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden no-select">
 
-    <!-- ヘッダー（戻るボタンなど） -->
-    <header class="h-14 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6 shrink-0">
+    <!-- ヘッダー -->
+    <header class="h-14 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6 shrink-0 z-10">
         <a href="index.html#presentations" class="flex items-center gap-2 text-gray-400 hover:text-white transition text-sm font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             ポートフォリオに戻る
         </a>
-        <h1 id="presentation-title" class="font-bold text-sm md:text-base truncate max-w-md">Loading...</h1>
+        <h1 id="presentation-title" class="font-bold text-sm md:text-base truncate max-w-md text-gray-200">Loading...</h1>
         <div class="text-xs text-gray-500 font-mono" id="slide-counter">0 / 0</div>
     </header>
 
-    <!-- メインエリア（スライド表示） -->
+    <!-- メインエリア -->
     <main class="flex-grow flex items-center justify-center p-4 md:p-8 bg-black">
-        <div class="w-full max-w-6xl slide-container bg-white text-slate-900 rounded-xl shadow-2xl relative overflow-hidden flex flex-col slide-bg-pattern">
+        <div class="w-full max-w-6xl slide-container bg-white text-slate-900 rounded-xl shadow-2xl relative overflow-hidden flex flex-col">
             
-            <!-- スライドの中身がここに描画されます -->
-            <div id="slide-viewer" class="absolute inset-0 p-8 md:p-16 flex flex-col h-full w-full slide-content">
+            <!-- スライド表示エリア -->
+            <div id="slide-viewer" class="absolute inset-0 flex flex-col h-full w-full slide-content bg-white">
                 <!-- JSでコンテンツ注入 -->
             </div>
 
-            <!-- 著作権表記（スライド下部） -->
-            <div class="absolute bottom-4 right-6 text-[10px] text-gray-400 font-mono">
-                © Portfolio Presentation / <span id="current-slide-footer">01</span>
+            <!-- フッター（スライド内） -->
+            <div class="absolute bottom-0 w-full h-12 px-8 flex justify-between items-center bg-white/90 backdrop-blur-sm border-t border-gray-100 text-[10px] text-gray-400 font-mono z-20">
+                <span id="footer-title" class="uppercase tracking-widest">Presentation</span>
+                <span id="current-slide-footer">01</span>
             </div>
         </div>
     </main>
 
     <!-- コントローラー -->
-    <footer class="h-20 bg-gray-800 border-t border-gray-700 flex items-center justify-center gap-8 shrink-0">
-        <button id="prev-btn" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+    <footer class="h-20 bg-gray-800 border-t border-gray-700 flex items-center justify-center gap-8 shrink-0 z-10">
+        <button id="prev-btn" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Prev
         </button>
@@ -62,112 +62,226 @@
             <div id="progress-bar" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
         </div>
 
-        <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+        <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg hover:shadow-indigo-500/30">
             Next
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
     </footer>
 
     <script>
-        // ▼▼▼ データ生成ロジック ▼▼▼
+        // ▼▼▼ データ定義 ▼▼▼
         
-        // URLパラメータからIDを取得
         const urlParams = new URLSearchParams(window.location.search);
         const presentationId = urlParams.get('id') || 'music-study';
 
-        // プレゼンごとの基本設定（タイトルとテーマカラー）
+        // index.htmlと同じ画像データを定義（確実に表示させるため）
         const presentationsMeta = {
-            'music-study': { title: "流麗な音楽スタディで目指せるスライド", color: "text-rose-600", bg: "bg-rose-100" },
-            'future-of-education': { title: "未来の教育：パーソナライズされた学習体験", color: "text-blue-600", bg: "bg-blue-100" },
-            'local-digital-marketing': { title: "地方創生と伝統工芸のデジタルマーケティング", color: "text-emerald-600", bg: "bg-emerald-100" },
-            'space-business': { title: "宇宙ビジネスの新たなフロンティア", color: "text-slate-800", bg: "bg-slate-200" },
-            'health-tech': { title: "ヘルステックの進化：予防医療", color: "text-cyan-600", bg: "bg-cyan-100" },
-            'sustainable-fashion': { title: "サステナブルファッションの挑戦", color: "text-orange-600", bg: "bg-orange-100" },
-            'esports-social-impact': { title: "eスポーツの社会的影響", color: "text-purple-600", bg: "bg-purple-100" },
-            'smart-city-digital-twin': { title: "デジタルツインが拓くスマートシティ", color: "text-indigo-600", bg: "bg-indigo-100" },
-            'vr-cultural-understanding': { title: "異文化理解を深めるVR体験デザイン", color: "text-violet-600", bg: "bg-violet-100" },
-            'food-tech': { title: "フードテックの最前線", color: "text-lime-600", bg: "bg-lime-100" }
+            'music-study': { 
+                title: "流麗な音楽スタディで目指せるスライド", 
+                color: "text-rose-600", bg: "bg-rose-50", accent: "border-rose-600",
+                mainImage: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=1200&q=80"
+            },
+            'future-of-education': { 
+                title: "未来の教育：パーソナライズされた学習体験", 
+                color: "text-blue-600", bg: "bg-blue-50", accent: "border-blue-600",
+                mainImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&q=80"
+            },
+            'local-digital-marketing': { 
+                title: "地方創生と伝統工芸のデジタルマーケティング", 
+                color: "text-emerald-600", bg: "bg-emerald-50", accent: "border-emerald-600",
+                mainImage: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1200&q=80"
+            },
+            'space-business': { 
+                title: "宇宙ビジネスの新たなフロンティア", 
+                color: "text-slate-800", bg: "bg-slate-50", accent: "border-slate-800",
+                mainImage: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200&q=80"
+            },
+            'health-tech': { 
+                title: "ヘルステックの進化：予防医療", 
+                color: "text-cyan-600", bg: "bg-cyan-50", accent: "border-cyan-600",
+                mainImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80"
+            },
+            'sustainable-fashion': { 
+                title: "サステナブルファッションの挑戦", 
+                color: "text-orange-600", bg: "bg-orange-50", accent: "border-orange-600",
+                mainImage: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1200&q=80"
+            },
+            'esports-social-impact': { 
+                title: "eスポーツの社会的影響", 
+                color: "text-purple-600", bg: "bg-purple-50", accent: "border-purple-600",
+                mainImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80"
+            },
+            'smart-city-digital-twin': { 
+                title: "デジタルツインが拓くスマートシティ", 
+                color: "text-indigo-600", bg: "bg-indigo-50", accent: "border-indigo-600",
+                mainImage: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80"
+            },
+            'vr-cultural-understanding': { 
+                title: "異文化理解を深めるVR体験デザイン", 
+                color: "text-violet-600", bg: "bg-violet-50", accent: "border-violet-600",
+                mainImage: "https://images.unsplash.com/photo-1555212697-194d092e3b8f?w=1200&q=80"
+            },
+            'food-tech': { 
+                title: "フードテックの最前線", 
+                color: "text-lime-600", bg: "bg-lime-50", accent: "border-lime-600",
+                mainImage: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80"
+            }
         };
 
-        // 指定されたIDの情報、なければデフォルト
         const currentMeta = presentationsMeta[presentationId] || presentationsMeta['music-study'];
 
-        // 20枚のスライドデータを自動生成する関数
+        // 文脈に応じた画像のURLリスト（Unsplash固定ID）
+        const contextImages = {
+            'analysis': "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // グラフ、分析
+            'people': "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",   // 人々、議論
+            'design': "https://images.unsplash.com/photo-1509395062549-057d36931602?w=800&q=80",   // デザイン、スケッチ
+            'tech': "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",     // PC、コード
+            'business': "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", // オフィス、握手
+            'money': "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",    // 予算、計算
+            'future': "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80" // 未来、抽象
+        };
+
+        // ▼▼▼ スライド生成ロジック ▼▼▼
+
         function generateSlides(meta) {
             const slides = [];
-            const themeColor = meta.color;
             
-            // 1枚目：タイトルスライド
+            // 1. タイトルスライド
             slides.push(`
-                <div class="flex flex-col justify-center h-full text-center">
-                    <div class="inline-block mx-auto mb-6 px-4 py-1 rounded-full ${meta.bg} ${themeColor} text-xs font-bold tracking-widest uppercase">Presentation</div>
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-8 leading-tight">${meta.title}</h1>
-                    <p class="text-slate-500 text-lg">2024 Project Proposal / Portfolio</p>
+                <div class="flex h-full">
+                    <div class="w-1/2 p-12 md:p-16 flex flex-col justify-center bg-white z-10 relative">
+                        <div class="absolute top-16 left-16 w-12 h-1 bg-gradient-to-r from-gray-800 to-transparent"></div>
+                        <div class="inline-block mb-6 text-sm font-bold tracking-[0.2em] uppercase text-gray-400">Project Proposal</div>
+                        <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">${meta.title}</h1>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User">
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-900">Presented by Creator</p>
+                                <p class="text-xs text-slate-500">2024 Portfolio Presentation</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 bg-gray-100 relative overflow-hidden">
+                        <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[20s] hover:scale-110" style="transform: scale(1.05);" alt="Hero">
+                        <div class="absolute inset-0 bg-slate-900/10"></div>
+                    </div>
                 </div>
             `);
 
-            // 2枚目：目次
+            // 2. 目次 (画像なし、テキスト中心)
             slides.push(`
-                <div class="h-full flex flex-col">
-                    <h2 class="text-3xl font-bold ${themeColor} mb-12">Agenda</h2>
-                    <ul class="space-y-6 text-xl text-slate-700 ml-8 list-none">
-                        <li class="flex items-center gap-4"><span class="font-bold text-slate-300">01</span> 現状の課題と背景</li>
-                        <li class="flex items-center gap-4"><span class="font-bold text-slate-300">02</span> 提案するソリューション</li>
-                        <li class="flex items-center gap-4"><span class="font-bold text-slate-300">03</span> 市場調査とデータ分析</li>
-                        <li class="flex items-center gap-4"><span class="font-bold text-slate-300">04</span> 具体的なデザイン戦略</li>
-                        <li class="flex items-center gap-4"><span class="font-bold text-slate-300">05</span> 今後の展望とロードマップ</li>
-                    </ul>
+                <div class="h-full p-12 md:p-16 relative overflow-hidden bg-slate-50">
+                    <div class="absolute -right-20 -top-20 w-96 h-96 bg-gray-200 rounded-full opacity-50 blur-3xl"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-center max-w-3xl">
+                        <h2 class="text-4xl font-black text-slate-900 mb-12">Agenda</h2>
+                        <div class="grid gap-6">
+                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                                <span class="text-2xl font-black ${meta.color} w-12">01</span>
+                                <span class="text-xl font-bold text-slate-700">現状の課題とプロジェクト背景</span>
+                            </div>
+                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                                <span class="text-2xl font-black ${meta.color} w-12">02</span>
+                                <span class="text-xl font-bold text-slate-700">提案するコアソリューション</span>
+                            </div>
+                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                                <span class="text-2xl font-black ${meta.color} w-12">03</span>
+                                <span class="text-xl font-bold text-slate-700">市場分析とターゲットインサイト</span>
+                            </div>
+                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                                <span class="text-2xl font-black ${meta.color} w-12">04</span>
+                                <span class="text-xl font-bold text-slate-700">実装計画とロードマップ</span>
+                            </div>
+                            <div class="flex items-center gap-6 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                                <span class="text-2xl font-black ${meta.color} w-12">05</span>
+                                <span class="text-xl font-bold text-slate-700">収支計画・KPI設定</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `);
 
-            // 3〜19枚目：コンテンツ（自動生成）
-            const topics = [
-                "市場背景の分析", "ユーザーインサイト", "ペルソナ設定", "カスタマージャーニー",
-                "コアコンセプト", "UI/UXデザイン方針", "技術スタック選定", "プロトタイプ検証",
-                "競合他社比較", "差別化要因", "ビジネスモデル", "収益化計画",
-                "マーケティング戦略", "リスク分析", "運用体制", "スケジュール", "予算計画"
+            // 3〜19. コンテンツスライド（画像付き）
+            const contents = [
+                { title: "市場背景の分析", img: contextImages.analysis, text: "市場規模は年々拡大傾向にあり、特にデジタル分野での成長が顕著です。競合他社の動向を分析し、参入障壁と機会を特定しました。" },
+                { title: "ユーザーインサイト", img: contextImages.people, text: "ターゲットユーザーへのインタビューから、既存サービスに対する不満と潜在的なニーズが明らかになりました。" },
+                { title: "ペルソナ設定", img: contextImages.people, text: "メインとなるペルソナを設定し、行動特性や価値観を詳細に定義。共感を呼ぶサービス設計の基礎とします。" },
+                { title: "カスタマージャーニー", img: contextImages.design, text: "認知から利用、継続に至るまでのユーザー体験を可視化。ペインポイントを解消する施策を各フェーズに配置しました。" },
+                { title: "コアコンセプト", img: contextImages.future, text: "「テクノロジーで人々の生活を豊かに」を軸に、シンプルかつ革新的な価値提案を行います。" },
+                { title: "UI/UXデザイン方針", img: contextImages.design, text: "直感的で学習コストの低いインターフェースを採用。アクセシビリティにも配慮したユニバーサルデザインを目指します。" },
+                { title: "技術スタック選定", img: contextImages.tech, text: "スケーラビリティと開発効率を重視し、モダンなフレームワークを採用。将来的な機能拡張にも柔軟に対応可能です。" },
+                { title: "プロトタイプ検証", img: contextImages.tech, text: "初期プロトタイプを用いたユーザビリティテストを実施。フィードバックを即座に製品に反映させるアジャイルな開発体制です。" },
+                { title: "競合他社比較", img: contextImages.analysis, text: "主要な競合3社との機能比較を行い、当社の優位性を明確化。価格競争ではなく価値提供での差別化を図ります。" },
+                { title: "差別化要因", img: contextImages.future, text: "独自アルゴリズムによるパーソナライズ機能が最大の強みです。他社が模倣困難な技術的優位性を保持しています。" },
+                { title: "ビジネスモデル", img: contextImages.business, text: "サブスクリプションモデルを基本としつつ、エンタープライズ向けのカスタマイズプランも用意。安定した収益基盤を構築します。" },
+                { title: "収益化計画", img: contextImages.money, text: "サービス開始後6ヶ月での黒字化を計画。初期投資の回収期間は1.5年を見込んでいます。" },
+                { title: "マーケティング戦略", img: contextImages.business, text: "SNSとオウンドメディアを活用したコンテンツマーケティングを展開。オーガニック流入の最大化を目指します。" },
+                { title: "リスク分析", img: contextImages.analysis, text: "技術的負債、法規制の変化、競合の新規参入などのリスク要因を洗い出し、それぞれの対策案を策定済みです。" },
+                { title: "運用体制", img: contextImages.people, text: "開発、デザイン、マーケティング、サポートの各部門が連携。迅速な意思決定が可能なプロジェクトチームを組成します。" },
+                { title: "スケジュール", img: contextImages.business, text: "要件定義からリリースまで6ヶ月の工程を予定。マイルストーンごとの進捗確認を徹底し、遅延リスクを最小化します。" },
+                { title: "予算計画", img: contextImages.money, text: "開発費、広告宣伝費、人件費の配分を最適化。ROIを最大化するための資源配分を行います。" }
             ];
 
-            topics.forEach((topic, index) => {
+            contents.forEach((item, i) => {
+                // 偶数・奇数でレイアウトを反転させる
+                const isEven = i % 2 === 0;
+                const orderText = isEven ? 'order-1' : 'order-2';
+                const orderImg = isEven ? 'order-2' : 'order-1';
+
                 slides.push(`
-                    <div class="h-full flex flex-col">
-                        <div class="flex justify-between items-end border-b border-gray-200 pb-4 mb-8">
-                            <h2 class="text-2xl font-bold ${themeColor}">${topic}</h2>
-                            <span class="text-4xl font-black text-gray-100">${String(index + 3).padStart(2, '0')}</span>
+                    <div class="flex h-full">
+                        <div class="w-1/2 p-12 flex flex-col justify-center bg-white ${orderText}">
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="text-sm font-bold text-slate-300">0${i + 3}</span>
+                                <div class="h-px bg-slate-200 flex-grow"></div>
+                            </div>
+                            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 leading-snug">${item.title}</h2>
+                            <p class="text-slate-600 leading-relaxed text-sm md:text-base mb-8">
+                                ${item.text}<br><br>
+                                私たちの分析によれば、このアプローチが最も効果的であり、持続可能な成長をもたらすと確信しています。
+                            </p>
+                            <ul class="space-y-2 text-sm text-slate-500">
+                                <li class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 ${meta.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    重要ポイント確認済み
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 ${meta.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    データによる裏付けあり
+                                </li>
+                            </ul>
                         </div>
-                        <div class="grid grid-cols-2 gap-8 h-full">
-                            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                                <h3 class="font-bold text-slate-800 mb-4 text-lg">主要ポイント</h3>
-                                <p class="text-slate-600 leading-relaxed text-sm">
-                                    このセクションでは、${topic}に関する詳細な検討を行いました。<br><br>
-                                    1. 従来の課題に対する新しいアプローチ<br>
-                                    2. データに基づく意思決定プロセス<br>
-                                    3. ステークホルダーへの価値提供
-                                </p>
-                            </div>
-                            <div class="bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-xs font-mono">
-                                [ Chart / Graph Area for ${topic} ]
-                            </div>
+                        <div class="w-1/2 bg-gray-100 relative ${orderImg}">
+                            <img src="${item.img}" class="absolute inset-0 w-full h-full object-cover" alt="${item.title}">
+                            <div class="absolute inset-0 bg-slate-900/5 mix-blend-multiply"></div>
                         </div>
                     </div>
                 `);
             });
 
-            // 20枚目：サンクススライド
+            // 20. サンクススライド
             slides.push(`
-                <div class="flex flex-col justify-center h-full text-center">
-                    <h2 class="text-4xl font-bold text-slate-900 mb-6">Thank You.</h2>
-                    <p class="text-slate-500 mb-12">ご清聴ありがとうございました。<br>詳細な資料についてはお問い合わせください。</p>
-                    <a href="index.html#contact" class="inline-block bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-700 transition mx-auto">
-                        お問い合わせはこちら
-                    </a>
+                <div class="flex flex-col justify-center items-center h-full text-center relative overflow-hidden bg-slate-900 text-white">
+                    <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm">
+                    <div class="relative z-10 max-w-2xl px-6">
+                        <h2 class="text-5xl font-black mb-8 tracking-tight">Thank You.</h2>
+                        <p class="text-slate-300 mb-12 text-lg leading-relaxed">
+                            本プロジェクトにご関心をお寄せいただき、<br>誠にありがとうございました。<br>
+                            詳細な資料やディスカッションについては、<br>下記よりお気軽にお問い合わせください。
+                        </p>
+                        <a href="index.html#contact" class="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition shadow-xl hover:scale-105 duration-300">
+                            <span>お問い合わせはこちら</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
                 </div>
             `);
 
             return slides;
         }
 
-        // ▼▼▼ スライド制御ロジック ▼▼▼
+        // ▼▼▼ 制御ロジック（変更なし） ▼▼▼
 
         const slidesData = generateSlides(currentMeta);
         let currentIndex = 0;
@@ -178,38 +292,41 @@
         const counter = document.getElementById('slide-counter');
         const progressBar = document.getElementById('progress-bar');
         const footerCounter = document.getElementById('current-slide-footer');
+        const footerTitle = document.getElementById('footer-title');
         const titleEl = document.getElementById('presentation-title');
 
-        // タイトル設定
         titleEl.textContent = currentMeta.title;
+        footerTitle.textContent = currentMeta.title;
         document.title = `${currentMeta.title} | Slide Viewer`;
 
         function updateSlide() {
-            // コンテンツの更新
-            slideViewer.style.opacity = '0'; // フェードアウト
+            slideViewer.style.opacity = '0';
             
             setTimeout(() => {
                 slideViewer.innerHTML = slidesData[currentIndex];
-                slideViewer.style.opacity = '1'; // フェードイン
+                slideViewer.style.opacity = '1';
                 
-                // カウンター更新
                 counter.textContent = `${currentIndex + 1} / ${slidesData.length}`;
                 footerCounter.textContent = String(currentIndex + 1).padStart(2, '0');
                 
-                // プログレスバー更新
                 const progress = ((currentIndex + 1) / slidesData.length) * 100;
                 progressBar.style.width = `${progress}%`;
 
-                // ボタン状態
                 prevBtn.disabled = currentIndex === 0;
                 nextBtn.disabled = currentIndex === slidesData.length - 1;
-            }, 300);
+                
+                // 最後のスライドだけNextボタンの文言を変える（オプション）
+                if (currentIndex === slidesData.length - 1) {
+                    nextBtn.innerHTML = `Finish`;
+                } else {
+                    nextBtn.innerHTML = `Next <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                }
+
+            }, 200); // 遷移時間を少し短くしてサクサク感アップ
         }
 
-        // 初期表示
         updateSlide();
 
-        // イベントリスナー
         prevBtn.addEventListener('click', () => {
             if (currentIndex > 0) {
                 currentIndex--;
@@ -224,7 +341,6 @@
             }
         });
 
-        // キーボード操作
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
                 if (currentIndex < slidesData.length - 1) {
