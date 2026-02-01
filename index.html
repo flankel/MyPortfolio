@@ -27,7 +27,7 @@
             <div class="font-bold text-xl tracking-tight">Portfolio.</div>
             <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
                 <a href="#works" class="hover:text-black transition">Works</a>
-                <a href="#presentations" class="hover:text-black transition">Presentations</a> <!-- 新規追加 -->
+                <a href="#presentations" class="hover:text-black transition">Presentations</a>
                 <a href="#skills" class="hover:text-black transition">Skills</a>
                 <a href="#contact" class="hover:text-black transition">Contact</a>
             </nav>
@@ -50,7 +50,7 @@
                 <a href="#works" class="bg-slate-900 text-white px-8 py-4 rounded-lg font-bold hover:bg-slate-700 transition">
                     制作実績を見る
                 </a>
-                <a href="#presentations" class="bg-indigo-600 text-white px-8 py-4 rounded-lg font-bold hover:bg-indigo-700 transition"> <!-- 新規追加 -->
+                <a href="#presentations" class="bg-indigo-600 text-white px-8 py-4 rounded-lg font-bold hover:bg-indigo-700 transition">
                     プレゼン実績を見る
                 </a>
             </div>
@@ -204,7 +204,7 @@
                 category: "環境/テクノロジー", 
                 image: "https://images.unsplash.com/photo-1517757917833-289b4f91060f?w=800&q=80", // 環境問題やテクノロジーをイメージする画像
                 desc: "AIやIoTが環境課題をどう解決するか。具体的な事例と未来の展望。",
-                folder: "environmental-tech" // フォルダ名を追加
+                folder: "environmental-tech"
             },
             { 
                 name: "地方創生と伝統工芸のデジタルマーケティング戦略", 
@@ -282,7 +282,7 @@
 
 
         const grid = document.getElementById('portfolio-grid');
-        const presentationsGrid = document.getElementById('presentations-grid'); // 新しいグリッド要素
+        const presentationsGrid = document.getElementById('presentations-grid');
 
         // Webサイト実績のレンダリング
         projects.forEach(project => {
@@ -313,8 +313,6 @@
 
         // プレゼンテーション実績のレンダリング
         presentations.forEach(presentation => {
-            // GitHub PagesでMarkdownファイルを直接表示するURL
-            // 例: https://flankel.github.io/MyPortfolio/presentations/environmental-tech/01-introduction.md
             const presentationUrl = `https://${GITHUB_ID}.github.io/MyPortfolio/presentations/${presentation.path}`;
             
             const card = `
