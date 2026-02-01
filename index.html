@@ -12,14 +12,6 @@
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         /* フォームのフォーカス時のアニメーション */
         .input-field:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5); }
-        /* スライド画像用のスタイル */
-        .presentation-slides img {
-            width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -92,41 +84,6 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="presentations-grid">
                 <!-- JSで生成されます -->
             </div>
-
-            <!-- 最初のプレゼンテーションのスライド表示エリア -->
-            <!-- このセクションはデフォルトで非表示にし、適切なプレゼンテーションがクリックされたときに表示されます -->
-            <div id="presentation-detail-music-study" class="mt-16 hidden">
-                <h3 class="text-2xl font-bold mb-8 text-center">流麗な音楽スタディで目指せるスライド</h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 presentation-slides">
-                    <!-- 生成されたPNG画像がここに挿入されます -->
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div class="text-center mt-8">
-                    <a href="#presentations" class="bg-gray-200 text-slate-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition" onclick="hidePresentationDetail()">
-                        一覧に戻る
-                    </a>
-                </div>
-            </div>
-
         </div>
     </section>
     <!-- ▲▲▲ ここまでプレゼンテーション実績セクション ▲▲▲ -->
@@ -243,80 +200,89 @@
         const presentations = [
             { 
                 name: "流麗な音楽スタディで目指せるスライド", 
-                id: "music-study", // 各プレゼンテーションに一意のIDを追加
+                id: "music-study", 
                 category: "音楽/教育", 
-                image: "https://images.unsplash.com/photo-1470225640332-e018d97607a7?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // 環境問題やテクノロジーをイメージする画像
+                image: "https://images.unsplash.com/photo-1470225640332-e018d97607a7?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
                 desc: "AIやIoTが環境課題をどう解決するか。具体的な事例と未来の展望。",
+                link: "slides/music-study.html" // 個別ページへのリンクを追加
             },
             { 
                 name: "未来の教育：パーソナライズされた学習体験のデザイン", 
                 id: "future-of-education",
                 category: "教育/AI", 
-                image: "https://images.unsplash.com/photo-1588196749597-9ff0b7ee9d6d?w=800&q=80", // 教育や未来的な学習イメージ
+                image: "https://images.unsplash.com/photo-1588196749597-9ff0b7ee9d6d?w=800&q=80", 
                 desc: "AIが個々に最適化する未来の教育システムを提案。",
+                link: "#" // 他のプレゼンテーションは現時点ではリンクなし
             },
             { 
                 name: "地方創生と伝統工芸のデジタルマーケティング戦略", 
                 id: "local-digital-marketing",
                 category: "地方創生/マーケティング", 
-                image: "https://images.unsplash.com/photo-1532012197247-f47a9561b0c0?w=800&q=80", // 伝統工芸や地方のイメージ
+                image: "https://images.unsplash.com/photo-1532012197247-f47a9561b0c0?w=800&q=80", 
                 desc: "伝統工芸をデジタルで世界に。成功戦略と具体的施策。",
+                link: "#"
             },
             { 
                 name: "宇宙ビジネスの新たなフロンティア：月面資源開発の可能性", 
                 id: "space-business",
                 category: "宇宙/ビジネス", 
-                image: "https://images.unsplash.com/photo-1517976077977-f273ed22312b?w=800&q=80", // 月面や宇宙ビジネスのイメージ
+                image: "https://images.unsplash.com/photo-1517976077977-f273ed22312b?w=800&q=80", 
                 desc: "月面資源開発の技術、経済、国際協力の可能性を探る。",
+                link: "#"
             },
             { 
                 name: "ヘルステックの進化：予防医療と個別化された健康管理", 
                 id: "health-tech",
                 category: "医療/ヘルスケア", 
-                image: "https://images.unsplash.com/photo-1538356191986-e2652a925439?w=800&q=80", // ヘルステックや健康管理のイメージ
+                image: "https://images.unsplash.com/photo-1538356191986-e2652a925439?w=800&q=80", 
                 desc: "ウェアラブル、AI診断で実現する未来の医療システム。",
+                link: "#"
             },
             { 
                 name: "サステナブルファッションの挑戦：循環型経済への転換", 
                 id: "sustainable-fashion",
                 category: "ファッション/サステナビリティ", 
-                image: "https://images.unsplash.com/photo-1558291880-60b6b0c2a7e7?w=800&q=80", // サステナブルファッションのイメージ
+                image: "https://images.unsplash.com/photo-1558291880-60b6b0c2a7e7?w=800&q=80", 
                 desc: "ファッション業界が持続可能なビジネスモデルへ。",
+                link: "#"
             },
             { 
                 name: "eスポーツの社会的影響：新たなキャリアとコミュニティ形成", 
                 id: "esports-social-impact",
                 category: "eスポーツ/社会", 
-                image: "https://images.unsplash.com/photo-1542838183-5a7a7d4a5c0b?w=800&q=80", // eスポーツのイメージ
+                image: "https://images.unsplash.com/photo-1542838183-5a7a7d4a5c0b?w=800&q=80", 
                 desc: "eスポーツが若者に与える影響、キャリア、社会性。",
+                link: "#"
             },
             { 
                 name: "デジタルツインが拓くスマートシティの未来", 
                 id: "smart-city-digital-twin",
                 category: "都市開発/テクノロジー", 
-                image: "https://images.unsplash.com/photo-1547842323-e666a8779b9a?w=800&q=80", // スマートシティやデジタルツインのイメージ
+                image: "https://images.unsplash.com/photo-1547842323-e666a8779b9a?w=800&q=80", 
                 desc: "デジタルツインで都市を最適化。スマートシティの可能性。",
+                link: "#"
             },
             { 
                 name: "異文化理解を深めるVR体験デザイン", 
                 id: "vr-cultural-understanding",
                 category: "VR/文化", 
-                image: "https://images.unsplash.com/photo-1601614769018-8f8f2e2f6b3e?w=800&q=80", // VR体験や異文化のイメージ
+                image: "https://images.unsplash.com/photo-1601614769018-8f8f2e2f6b3e?w=800&q=80", 
                 desc: "VRで没入する異文化体験、教育・ビジネスへの応用。",
+                link: "#"
             },
             { 
                 name: "フードテックの最前線：食糧危機と未来の食卓", 
                 id: "food-tech",
                 category: "食品/テクノロジー", 
-                image: "https://images.unsplash.com/photo-1506147285514-6997a3a8080a?w=800&q=80", // フードテックや未来の食のイメージ
+                image: "https://images.unsplash.com/photo-1506147285514-6997a3a8080a?w=800&q=80", 
                 desc: "代替肉、植物工場など、食糧危機を乗り越える技術。",
+                link: "#"
             }
         ];
 
 
         const grid = document.getElementById('portfolio-grid');
         const presentationsGrid = document.getElementById('presentations-grid');
-        const presentationDetailMusicStudy = document.getElementById('presentation-detail-music-study');
 
         // Webサイト実績のレンダリング
         projects.forEach(project => {
@@ -349,7 +315,7 @@
         presentations.forEach(presentation => {
             const card = `
                 <article class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 card-hover transition duration-300 flex flex-col h-full">
-                    <a href="#" class="block aspect-video bg-gray-200 relative overflow-hidden group" onclick="showPresentationDetail('${presentation.id}'); return false;">
+                    <a href="${presentation.link}" target="_blank" class="block aspect-video bg-gray-200 relative overflow-hidden group">
                         <img src="${presentation.image}" alt="${presentation.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
                             <span class="text-white font-bold border border-white px-4 py-2 rounded-full">スライドを見る</span>
@@ -358,10 +324,10 @@
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="text-xs font-bold text-indigo-600 mb-2 uppercase tracking-wide">${presentation.category}</div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2">
-                            <a href="#" class="hover:text-indigo-600 transition" onclick="showPresentationDetail('${presentation.id}'); return false;">${presentation.name}</a>
+                            <a href="${presentation.link}" target="_blank" class="hover:text-indigo-600 transition">${presentation.name}</a>
                         </h3>
                         <p class="text-sm text-slate-500 leading-relaxed mb-4 flex-grow">${presentation.desc}</p>
-                        <a href="#" class="text-sm font-bold text-slate-900 border-b border-slate-300 pb-0.5 inline-block hover:border-black transition w-max" onclick="showPresentationDetail('${presentation.id}'); return false;">
+                        <a href="${presentation.link}" target="_blank" class="text-sm font-bold text-slate-900 border-b border-slate-300 pb-0.5 inline-block hover:border-black transition w-max">
                             スライドを見る &rarr;
                         </a>
                     </div>
@@ -369,30 +335,6 @@
             `;
             presentationsGrid.innerHTML += card;
         });
-
-        // プレゼンテーション詳細を表示する関数
-        function showPresentationDetail(presentationId) {
-            // まずすべてのプレゼンテーション詳細を非表示にする
-            document.querySelectorAll('[id^="presentation-detail-"]').forEach(detail => {
-                detail.classList.add('hidden');
-            });
-            // プレゼンテーションカード一覧を非表示にする
-            presentationsGrid.classList.add('hidden');
-
-            // 選択されたプレゼンテーションの詳細を表示
-            const targetDetail = document.getElementById(`presentation-detail-${presentationId}`);
-            if (targetDetail) {
-                targetDetail.classList.remove('hidden');
-            }
-        }
-
-        // プレゼンテーション詳細を非表示にして一覧に戻る関数
-        function hidePresentationDetail() {
-            document.querySelectorAll('[id^="presentation-detail-"]').forEach(detail => {
-                detail.classList.add('hidden');
-            });
-            presentationsGrid.classList.remove('hidden'); // プレゼンテーションカード一覧を表示
-        }
     </script>
 </body>
 </html>
