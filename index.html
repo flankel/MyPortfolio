@@ -94,10 +94,36 @@
             </div>
 
             <!-- 最初のプレゼンテーションのスライド表示エリア -->
-            <div id="first-presentation-slides" class="mt-16 hidden">
+            <!-- このセクションはデフォルトで非表示にし、適切なプレゼンテーションがクリックされたときに表示されます -->
+            <div id="presentation-detail-music-study" class="mt-16 hidden">
                 <h3 class="text-2xl font-bold mb-8 text-center">流麗な音楽スタディで目指せるスライド</h3>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 presentation-slides">
                     <!-- 生成されたPNG画像がここに挿入されます -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text-center mt-8">
+                    <a href="#presentations" class="bg-gray-200 text-slate-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition" onclick="hidePresentationDetail()">
+                        一覧に戻る
+                    </a>
                 </div>
             </div>
 
@@ -290,7 +316,7 @@
 
         const grid = document.getElementById('portfolio-grid');
         const presentationsGrid = document.getElementById('presentations-grid');
-        const firstPresentationSlidesDiv = document.getElementById('first-presentation-slides');
+        const presentationDetailMusicStudy = document.getElementById('presentation-detail-music-study');
 
         // Webサイト実績のレンダリング
         projects.forEach(project => {
@@ -321,45 +347,51 @@
 
         // プレゼンテーション実績のレンダリング
         presentations.forEach(presentation => {
-            // ここでは各プレゼンテーションのカードを作成し、クリックでスライド表示エリアを表示するようにします
             const card = `
-                <article class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 card-hover transition duration-300 flex flex-col h-full cursor-pointer" onclick="showPresentationSlides('${presentation.id}')">
-                    <div class="block aspect-video bg-gray-200 relative overflow-hidden group">
+                <article class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 card-hover transition duration-300 flex flex-col h-full">
+                    <a href="#" class="block aspect-video bg-gray-200 relative overflow-hidden group" onclick="showPresentationDetail('${presentation.id}'); return false;">
                         <img src="${presentation.image}" alt="${presentation.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
                             <span class="text-white font-bold border border-white px-4 py-2 rounded-full">スライドを見る</span>
                         </div>
-                    </div>
+                    </a>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="text-xs font-bold text-indigo-600 mb-2 uppercase tracking-wide">${presentation.category}</div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2">
-                            ${presentation.name}
+                            <a href="#" class="hover:text-indigo-600 transition" onclick="showPresentationDetail('${presentation.id}'); return false;">${presentation.name}</a>
                         </h3>
                         <p class="text-sm text-slate-500 leading-relaxed mb-4 flex-grow">${presentation.desc}</p>
-                        <span class="text-sm font-bold text-slate-900 border-b border-slate-300 pb-0.5 inline-block hover:border-black transition w-max">
+                        <a href="#" class="text-sm font-bold text-slate-900 border-b border-slate-300 pb-0.5 inline-block hover:border-black transition w-max" onclick="showPresentationDetail('${presentation.id}'); return false;">
                             スライドを見る &rarr;
-                        </span>
+                        </a>
                     </div>
                 </article>
             `;
             presentationsGrid.innerHTML += card;
         });
 
-        // プレゼンテーションスライドを表示する関数
-        function showPresentationSlides(presentationId) {
-            // 今回は最初のプレゼンテーションのみを対象とするため、IDが一致するかどうかで制御
-            if (presentationId === 'music-study') {
-                const slidesContainer = firstPresentationSlidesDiv.querySelector('.presentation-slides');
-                slidesContainer.innerHTML = ''; // 既存のスライドをクリア
+        // プレゼンテーション詳細を表示する関数
+        function showPresentationDetail(presentationId) {
+            // まずすべてのプレゼンテーション詳細を非表示にする
+            document.querySelectorAll('[id^="presentation-detail-"]').forEach(detail => {
+                detail.classList.add('hidden');
+            });
+            // プレゼンテーションカード一覧を非表示にする
+            presentationsGrid.classList.add('hidden');
 
-                // 20枚のPNG画像を生成して挿入
-                for (let i = 1; i <= 20; i++) {
-                    slidesContainer.innerHTML += `<div></div>`;
-                }
-                firstPresentationSlidesDiv.classList.remove('hidden'); // 表示
-            } else {
-                firstPresentationSlidesDiv.classList.add('hidden'); // 他のプレゼンテーションでは非表示
+            // 選択されたプレゼンテーションの詳細を表示
+            const targetDetail = document.getElementById(`presentation-detail-${presentationId}`);
+            if (targetDetail) {
+                targetDetail.classList.remove('hidden');
             }
+        }
+
+        // プレゼンテーション詳細を非表示にして一覧に戻る関数
+        function hidePresentationDetail() {
+            document.querySelectorAll('[id^="presentation-detail-"]').forEach(detail => {
+                detail.classList.add('hidden');
+            });
+            presentationsGrid.classList.remove('hidden'); // プレゼンテーションカード一覧を表示
         }
     </script>
 </body>
