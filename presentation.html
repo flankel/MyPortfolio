@@ -9,7 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
-        .aspect-slide { aspect-ratio: 16 / 9; }
+        /* モバイルでの高さを確保 */
+        .pdf-container { height: 60vh; }
+        @media (min-width: 768px) {
+            .pdf-container { height: auto; aspect-ratio: 16 / 9; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
@@ -23,28 +27,38 @@
             <nav class="flex gap-4">
                 <a href="index.html" class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-black transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to Home
+                    <span class="hidden md:inline">Back to Home</span>
+                    <span class="md:hidden">Back</span>
                 </a>
             </nav>
         </div>
     </header>
 
     <!-- メインコンテンツ -->
-    <main class="flex-grow py-12 px-6">
+    <main class="flex-grow py-8 md:py-12 px-4 md:px-6">
         <div class="max-w-5xl mx-auto">
             
             <!-- タイトルセクション -->
-            <div class="mb-8 text-center">
-                <span id="p-category" class="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-3 block">Category</span>
-                <h1 id="p-title" class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">資料を読み込んでいます...</h1>
-                <p id="p-desc" class="text-slate-500 max-w-2xl mx-auto"></p>
+            <div class="mb-6 md:mb-8 text-center">
+                <span id="p-category" class="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-2 block">Category</span>
+                <h1 id="p-title" class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">資料を読み込んでいます...</h1>
+                <p id="p-desc" class="text-sm md:text-base text-slate-500 max-w-2xl mx-auto"></p>
             </div>
 
-            <!-- PDFビューワーエリア -->
-            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-12">
-                <!-- PDF埋め込み (iframeを使用) -->
-                <!-- スマホなどPDF埋め込み非対応環境のために、高さ指定と代替リンクを用意 -->
-                <div class="aspect-slide w-full relative bg-slate-100">
+            <!-- ビューワーカード -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-8 md:mb-12">
+                
+                <!-- スマホ向け案内（埋め込みが見づらい場合用） -->
+                <div class="md:hidden bg-indigo-50 px-4 py-3 text-center border-b border-indigo-100">
+                    <p class="text-xs text-indigo-800 font-bold mb-2">スマホでうまく表示されない場合はこちら</p>
+                    <a id="btn-mobile-open" href="" target="_blank" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-indigo-700 transition w-full justify-center shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        PDFを全画面で開く
+                    </a>
+                </div>
+
+                <!-- PDF埋め込みエリア -->
+                <div class="pdf-container w-full relative bg-slate-100">
                     <iframe 
                         id="pdf-frame"
                         src="" 
@@ -53,72 +67,81 @@
                     </iframe>
                 </div>
                 
-                <!-- ダウンロードバー -->
-                <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-between items-center">
-                    <p class="text-xs text-slate-500">
-                        ※スマホで表示されない場合はダウンロードしてください
+                <!-- PC向けダウンロードバー -->
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-xs text-slate-500 text-center md:text-left">
+                        スライドが表示されない場合は、直接ファイルをダウンロードしてご覧ください。
                     </p>
-                    <a id="btn-download" href="" download class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
+                    <a id="btn-download" href="" download class="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-100 hover:text-black transition w-full md:w-auto justify-center">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         PDFをダウンロード
                     </a>
                 </div>
             </div>
 
+            <!-- 下部ナビゲーションボタン -->
+            <div class="flex justify-center">
+                <a href="index.html#presentations" class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition font-medium text-sm border border-slate-200 bg-white px-6 py-3 rounded-full shadow-sm hover:shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path></svg>
+                    一覧に戻る
+                </a>
+            </div>
+
         </div>
     </main>
 
-    <footer class="bg-slate-950 text-slate-600 py-8 text-center text-xs">
+    <footer class="bg-slate-950 text-slate-600 py-8 text-center text-xs mt-auto">
         &copy; 2024 Portfolio. All Rights Reserved.
     </footer>
 
     <!-- データ制御スクリプト -->
     <script>
-        // URLパラメータ(?id=xxx)を取得
         const urlParams = new URLSearchParams(window.location.search);
         const presentationId = urlParams.get('id');
 
-        // 資料データ（PDFのパスをここで管理します）
+        // 資料データ定義
         const presentations = {
             "music-study": {
                 title: "流麗な音楽スタディで目指せるスライド",
                 category: "Music / Education",
                 desc: "音楽理論と感性を融合させ、論理的かつ情緒的に伝えるためのプレゼンテーション。",
-                pdfPath: "assets/music-study.pdf" // ★ここにPDFのファイルパス
+                pdfPath: "assets/music-study.pdf" 
             },
             "future-of-education": {
                 title: "未来の教育：パーソナライズされた学習",
                 category: "Education / AI",
                 desc: "AIが個々に最適化する未来の教育システムを提案。",
-                pdfPath: "assets/sample.pdf" // サンプル用（必要ならファイルを作る）
+                pdfPath: "assets/music-study.pdf" // サンプルのため同じファイルを指定
             }
-            // 他のIDも同様に追加可能
+            // 必要に応じて追加
         };
 
-        // DOM要素の取得
         const data = presentations[presentationId];
+        
+        // 要素の取得
         const titleEl = document.getElementById('p-title');
         const catEl = document.getElementById('p-category');
         const descEl = document.getElementById('p-desc');
         const frameEl = document.getElementById('pdf-frame');
         const downloadBtn = document.getElementById('btn-download');
+        const mobileOpenBtn = document.getElementById('btn-mobile-open');
 
         if (data) {
-            // タイトルなどのテキスト反映
             document.title = `${data.title} | Portfolio`;
             titleEl.textContent = data.title;
             catEl.textContent = data.category;
             descEl.textContent = data.desc;
 
-            // PDFのパスを設定
+            // パスの設定
             frameEl.src = data.pdfPath;
             downloadBtn.href = data.pdfPath;
+            mobileOpenBtn.href = data.pdfPath; // モバイル用ボタンにも設定
         } else {
-            // データがない場合のエラー表示
             titleEl.textContent = "資料が見つかりません";
             catEl.textContent = "Error";
             descEl.textContent = "URLが正しいかご確認ください。";
             downloadBtn.style.display = 'none';
+            mobileOpenBtn.style.display = 'none';
         }
     </script>
 </body>
