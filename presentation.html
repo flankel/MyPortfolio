@@ -3,549 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentation Viewer</title>
+    <title>Presentation Viewer | Portfolio</title>
+    <meta name="description" content="プレゼンテーション資料の詳細表示">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
-        .slide-container {
-            aspect-ratio: 16 / 9;
-            perspective: 1000px;
-        }
-        .slide-content {
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .no-select { user-select: none; }
-        
-        /* 左右ナビゲーションボタンのスタイル */
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            z-index: 50;
-            color: #1f2937;
-        }
-        .nav-btn:hover {
-            background-color: white;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            scale: 1.1;
-        }
-        .nav-btn:active { scale: 0.95; }
-        .nav-btn:disabled { opacity: 0; pointer-events: none; }
-        
-        .nav-prev { left: 20px; }
-        .nav-next { right: 20px; }
-
-        /* スマホ用調整 */
-        @media (max-width: 640px) {
-            .nav-btn { width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.9); }
-            .nav-prev { left: 10px; }
-            .nav-next { right: 10px; }
-        }
+        .aspect-slide { aspect-ratio: 16 / 9; }
     </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden no-select">
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
 
     <!-- ヘッダー -->
-    <header class="h-14 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6 shrink-0 z-10">
-        <a href="index.html#presentations" class="flex items-center gap-2 text-gray-400 hover:text-white transition text-sm font-bold">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            <span class="hidden sm:inline">ポートフォリオに</span>戻る
-        </a>
-        <h1 id="presentation-title" class="font-bold text-sm md:text-base truncate max-w-xs md:max-w-md text-gray-200">Loading...</h1>
-        <div class="text-xs text-gray-500 font-mono" id="slide-counter">0 / 20</div>
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 bg-white/90 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="font-bold text-xl tracking-tight">
+                <a href="index.html" class="hover:text-indigo-600 transition">Portfolio.</a>
+            </div>
+            <nav class="flex gap-4">
+                <a href="index.html" class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-black transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Home
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <!-- メインエリア -->
-    <main class="flex-grow flex items-center justify-center p-2 md:p-8 bg-black relative">
-        
-        <!-- 画面上の左右ボタン (PC/スマホ共通) -->
-        <button id="nav-prev-btn" class="nav-btn nav-prev" aria-label="Previous Slide">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        </button>
-        <button id="nav-next-btn" class="nav-btn nav-next" aria-label="Next Slide">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </button>
-
-        <div class="w-full max-w-6xl slide-container bg-white text-slate-900 rounded-xl shadow-2xl relative overflow-hidden flex flex-col">
+    <!-- メインコンテンツ -->
+    <main class="flex-grow py-12 px-6">
+        <div class="max-w-5xl mx-auto">
             
-            <!-- スライド表示エリア -->
-            <div id="slide-viewer" class="absolute inset-0 flex flex-col h-full w-full slide-content bg-white">
-                <!-- JSでコンテンツ注入 -->
+            <!-- タイトルセクション -->
+            <div class="mb-8 text-center">
+                <span id="p-category" class="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-3 block">Category</span>
+                <h1 id="p-title" class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">資料を読み込んでいます...</h1>
+                <p id="p-desc" class="text-slate-500 max-w-2xl mx-auto"></p>
             </div>
 
-            <!-- フッター（スライド内） -->
-            <div class="absolute bottom-0 w-full h-8 md:h-12 px-4 md:px-8 flex justify-between items-center bg-white/90 backdrop-blur-sm border-t border-gray-100 text-[10px] text-gray-400 font-mono z-20">
-                <span id="footer-title" class="uppercase tracking-widest truncate max-w-[200px]">Presentation</span>
-                <span id="current-slide-footer">01</span>
+            <!-- PDFビューワーエリア -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-12">
+                <!-- PDF埋め込み (iframeを使用) -->
+                <!-- スマホなどPDF埋め込み非対応環境のために、高さ指定と代替リンクを用意 -->
+                <div class="aspect-slide w-full relative bg-slate-100">
+                    <iframe 
+                        id="pdf-frame"
+                        src="" 
+                        class="w-full h-full border-0" 
+                        allow="fullscreen">
+                    </iframe>
+                </div>
+                
+                <!-- ダウンロードバー -->
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-between items-center">
+                    <p class="text-xs text-slate-500">
+                        ※スマホで表示されない場合はダウンロードしてください
+                    </p>
+                    <a id="btn-download" href="" download class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        PDFをダウンロード
+                    </a>
+                </div>
             </div>
+
         </div>
     </main>
 
-    <!-- 下部コントローラー（プログレスバーのみ表示） -->
-    <footer class="h-14 bg-gray-800 border-t border-gray-700 flex items-center justify-center px-8 shrink-0 z-10">
-        <div class="w-full max-w-2xl h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div id="progress-bar" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
-        </div>
+    <footer class="bg-slate-950 text-slate-600 py-8 text-center text-xs">
+        &copy; 2024 Portfolio. All Rights Reserved.
     </footer>
 
+    <!-- データ制御スクリプト -->
     <script>
-        // ▼▼▼ ユーティリティ ▼▼▼
+        // URLパラメータ(?id=xxx)を取得
         const urlParams = new URLSearchParams(window.location.search);
-        const presentationId = urlParams.get('id') || 'music-study';
-        const unsplash = (id) => `https://images.unsplash.com/photo-${id}?w=800&q=80`;
+        const presentationId = urlParams.get('id');
 
-        // ▼▼▼ コンテンツデータ定義（前半10枚分） ▼▼▼
-        const presentationsData = {
-            'music-study': {
+        // 資料データ（PDFのパスをここで管理します）
+        const presentations = {
+            "music-study": {
                 title: "流麗な音楽スタディで目指せるスライド",
-                subtitle: "Music & Education App Design",
-                color: "text-rose-600", bg: "bg-rose-50", accent: "border-rose-600",
-                mainImage: unsplash("1507838153419-347d1b66072d"),
-                slides: [
-                    { title: "音楽教育の現状と課題", text: "既存の学習アプリは「楽譜が読める人」向けが多数。初心者が挫折しやすい導入期のハードルが高いことが最大の課題です。", img: unsplash("1514320291840-2e0a9bf2a9ae") },
-                    { title: "ターゲットユーザー分析", text: "趣味で楽器を始めたい20-30代の社会人をコアターゲットに設定。忙しい隙間時間に練習できる手軽さが求められています。", img: unsplash("1511671782779-c97d3d27a1d4") },
-                    { title: "学習継続の阻害要因", text: "「上達の実感が湧かない」ことが離脱の主因。可視化されたパラメータによるモチベーション維持が必要です。", img: unsplash("1594833233656-78b975f28494") },
-                    { title: "提案：Gamified Music", text: "練習をRPGのような冒険に見立て、日々のミッションをクリアすることでスキル習得を目指す新しいUIを提案します。", img: unsplash("1550745165-900b30875c74") },
-                    { title: "UIデザインコンセプト", text: "五線譜の堅苦しさを排除し、直感的に音がわかるビジュアルベースのインターフェースを採用。", img: unsplash("1581291518633-83b4ebd1d83e") },
-                    { title: "学習ログ機能", text: "練習時間と習得コードを自動記録。カレンダー形式で「積み上げ」を可視化します。", img: unsplash("1484480974693-6ca0a78fb36b") },
-                    { title: "コミュニティ機能", text: "同じ曲を練習しているユーザー同士で励まし合える「バンドサークル」機能の実装。", img: unsplash("1511671782779-c97d3d27a1d4") },
-                    { title: "収益モデル", text: "基本機能は無料。プロ講師による添削機能と、限定楽曲の解放をプレミアムプランとして提供。", img: unsplash("1554224155-9ffd4cd95525") },
-                    { title: "開発ロードマップ", text: "Q1でMVPリリース、Q2でiOS版対応、Q3でサブスクリプション機能の実装を予定。", img: unsplash("1506784983877-45594efa4cbe") },
-                    { title: "プロモーション戦略", text: "YouTubeで活動する音楽系インフルエンサーとのタイアップを中心に認知を拡大。", img: unsplash("1611162616475-46b635cb6868") },
-                ]
+                category: "Music / Education",
+                desc: "音楽理論と感性を融合させ、論理的かつ情緒的に伝えるためのプレゼンテーション。",
+                pdfPath: "assets/music-study.pdf" // ★ここにPDFのファイルパス
             },
-            'future-of-education': {
-                title: "未来の教育：パーソナライズされた学習体験",
-                subtitle: "AI-Powered EdTech Solution",
-                color: "text-blue-600", bg: "bg-blue-50", accent: "border-blue-600",
-                mainImage: unsplash("1509062522246-3755977927d7"),
-                slides: [
-                    { title: "一斉授業の限界", text: "生徒一人ひとりの理解度は異なるにも関わらず、画一的なカリキュラムで進めざるを得ない現状があります。", img: unsplash("1427504604405-bef17c0c5861") },
-                    { title: "AIによる理解度解析", text: "回答にかかった時間やミスの傾向から、AIが生徒のつまずきポイントをリアルタイムで特定します。", img: unsplash("1550751827-4bd374c3f58b") },
-                    { title: "アダプティブ・ラーニング", text: "理解度に合わせて、出題される問題の難易度や解説のアプローチを自動調整するシステム。", img: unsplash("1503676260728-1c00da094a0b") },
-                    { title: "教師用ダッシュボード", text: "クラス全体の理解度をヒートマップで表示。サポートが必要な生徒を一目で把握可能です。", img: unsplash("1551288049-bebda4e38f71") },
-                    { title: "個別最適化された宿題", text: "全員同じ宿題ではなく、個々の苦手分野を克服するためのパーソナライズされた課題を自動生成。", img: unsplash("1434030216411-0b793f4b4173") },
-                    { title: "学習習慣の定着支援", text: "行動経済学に基づいたナッジ理論を応用し、無理なく学習を続けられるプッシュ通知設計。", img: unsplash("1501504905252-473c47e087f8") },
-                    { title: "教育格差の是正", text: "安価なタブレット端末のみで高度な個別指導を実現し、地域や経済状況による格差を縮小します。", img: unsplash("1488190213551-0552796fa2f9") },
-                    { title: "導入効果シミュレーション", text: "試験導入校では、平均偏差値が半年で5.4ポイント上昇するという結果が出ています。", img: unsplash("1551836022-d5d88e9218df") },
-                    { title: "セキュリティとプライバシー", text: "学習データは匿名化処理され、厳格なセキュリティ基準の下で管理・運用されます。", img: unsplash("1563986768609-322da13575f3") },
-                    { title: "今後の展開：STEAM教育", text: "今後はプログラミングやアート領域にも対応科目を拡大予定。", img: unsplash("1596495578065-6e0763fa1178") },
-                ]
-            },
-            'local-digital-marketing': {
-                title: "地方創生と伝統工芸のデジタルマーケティング",
-                subtitle: "Revitalizing Local Crafts",
-                color: "text-emerald-600", bg: "bg-emerald-50", accent: "border-emerald-600",
-                mainImage: unsplash("1542051841857-5f90071e7989"),
-                slides: [
-                    { title: "伝統工芸産業の衰退", text: "後継者不足と国内需要の縮小により、多くの伝統工芸が存続の危機に瀕しています。", img: unsplash("1528360983277-13d9b152c6d1") },
-                    { title: "海外市場の可能性", text: "一方で、「Japan Quality」への関心は欧米を中心に高まっており、越境EC市場は拡大傾向です。", img: unsplash("1476480862126-209bfaa8edc8") },
-                    { title: "デジタルシフトの遅れ", text: "多くの工房はWebサイトを持たず、発信力が圧倒的に不足しているのが現状です。", img: unsplash("1519389950473-47ba0277781c") },
-                    { title: "ストーリーテリング戦略", text: "単なる「物」ではなく、職人の想いや製造工程の物語を映像化し、付加価値として伝えます。", img: unsplash("1517457375362-f716e3947d33") },
-                    { title: "Instagram活用事例", text: "製作過程のASMR動画や美しい完成品写真を活用し、視覚的に海外ファンを獲得。", img: unsplash("1611162617474-5b21e879e113") },
-                    { title: "D2Cモデルの構築", text: "卸を介さず直接顧客に販売することで、職人の利益率を改善し、持続可能な経営を支援。", img: unsplash("1556742046-63884c659816") },
-                    { title: "クラウドファンディング", text: "新商品開発の資金調達とテストマーケティングを兼ねたクラファン実施のサポート。", img: unsplash("1554224155-8d04cb21cd6c") },
-                    { title: "体験型ツーリズムとの連携", text: "オンラインで興味を持った層を、現地の工房見学や製作体験へと誘致するO2O施策。", img: unsplash("1534438327276-14e5300c3a48") },
-                    { title: "若手職人の育成エコシステム", text: "デジタル活用により収益を安定させ、若者が職業として選択できる環境を整備します。", img: unsplash("1522202176988-66273c2fd55f") },
-                    { title: "地方自治体との連携", text: "ふるさと納税の返礼品開発など、行政と連携した地域ブランド化推進。", img: unsplash("1577416388049-741e7f677d24") },
-                ]
-            },
-            'space-business': {
-                title: "宇宙ビジネスの新たなフロンティア",
-                subtitle: "Lunar Resource Development",
-                color: "text-slate-800", bg: "bg-slate-50", accent: "border-slate-800",
-                mainImage: unsplash("1446776811953-b23d57bd21aa"),
-                slides: [
-                    { title: "月面経済圏（Moon Economy）", text: "2040年には100兆円規模になると予測される月面ビジネス市場の現状。", img: unsplash("1532094349884-543bc11b234d") },
-                    { title: "水資源の重要性", text: "月の極域に存在する「水」は、ロケット燃料や生活用水となる最も重要な資源です。", img: unsplash("1451187580459-43490279c0fa") },
-                    { title: "インフラ構築の課題", text: "過酷な放射線環境と温度差に耐えうる、自律制御型の建設ロボットが必要です。", img: unsplash("1485827404703-89b55fcc595e") },
-                    { title: "通信ネットワークの整備", text: "地球-月間の大容量通信インフラ「LunarNet」構想とその技術的ハードル。", img: unsplash("1451186859696-371d9477be93") },
-                    { title: "法整備と国際協調", text: "宇宙条約とアルテミス合意。民間企業が資源所有権を持つための法的枠組み。", img: unsplash("1589254065878-42c9d666aa67") },
-                    { title: "スタートアップの参入機会", text: "ロケット開発だけでなく、食料生産、医療、エンタメなど多様な業種にチャンスがあります。", img: unsplash("1519389950473-47ba0277781c") },
-                    { title: "月面データセンター", text: "冷却効率の良い月面環境を利用した、次世代データセンターの設置計画。", img: unsplash("1558494949-efc56153f989") },
-                    { title: "宇宙デブリ問題", text: "持続可能な開発のために、軌道上のデブリ除去技術とのセット運用が必須。", img: unsplash("1444703686981-a3abbc4d4fe3") },
-                    { title: "資金調達と投資動向", text: "VCによる宇宙ベンチャーへの投資額推移。リスクマネーの供給状況。", img: unsplash("1579621970563-ebec7560eb3e") },
-                    { title: "人類の多惑星居住化", text: "月を足掛かりとした火星移住計画へのロードマップ。", img: unsplash("1614728853975-a09388390437") },
-                ]
-            },
-            'health-tech': {
-                title: "ヘルステックの進化：予防医療",
-                subtitle: "Preventive Healthcare & AI",
-                color: "text-cyan-600", bg: "bg-cyan-50", accent: "border-cyan-600",
-                mainImage: unsplash("1576091160399-112ba8d25d1d"),
-                slides: [
-                    { title: "医療費増大の社会的課題", text: "高齢化に伴う医療費の圧迫。治療中心から「予防」中心へのパラダイムシフトが急務です。", img: unsplash("1504868584819-f8e8b4b6d7e3") },
-                    { title: "ウェアラブルデバイスの進化", text: "心拍数、睡眠、血糖値まで非侵襲で常時モニタリング可能なデバイスの普及。", img: unsplash("1510017803434-a899398421b3") },
-                    { title: "PHR（個人の健康記録）", text: "散逸している健診データやライフログを一元管理し、個人がデータを所有する時代へ。", img: unsplash("1550831161-2696e1904a05") },
-                    { title: "AI画像診断支援", text: "X線やMRI画像をAIが解析。医師の見落としを防ぎ、診断スピードを劇的に向上。", img: unsplash("1530497610204-328f748dcc25") },
-                    { title: "遠隔診療の定着", text: "通院負担の軽減と、医療過疎地における専門医療へのアクセス改善。", img: unsplash("1576091160550-217358c7e618") },
-                    { title: "メンタルヘルスケア", text: "音声解析やチャットボットによるストレスチェックと早期カウンセリング介入。", img: unsplash("1527137342181-65f0842e27d3") },
-                    { title: "ゲノム医療の民主化", text: "安価な遺伝子検査による疾患リスク予測と、体質に合わせた個別化予防。", img: unsplash("1530210124550-912dc1381cb8") },
-                    { title: "行動変容デザイン", text: "「わかっていてもできない」を解決する、アプリによる生活習慣改善コーチング。", img: unsplash("1471864190281-a937306d8a27") },
-                    { title: "データセキュリティ", text: "究極のプライバシー情報である医療データのブロックチェーン管理技術。", img: unsplash("1563013544-b0d85e099bb1") },
-                    { title: "2030年の医療ビジョン", text: "病院は「病気を治す場所」から、データに基づき「健康を維持するパートナー」へ。", img: unsplash("1519494026892-80bbd2d6fd0d") },
-                ]
-            },
-            'sustainable-fashion': {
-                title: "サステナブルファッションの挑戦",
-                subtitle: "Circular Economy in Fashion",
-                color: "text-orange-600", bg: "bg-orange-50", accent: "border-orange-600",
-                mainImage: unsplash("1523381210434-271e8be1f52b"),
-                slides: [
-                    { title: "ファッション業界の環境負荷", text: "大量生産・大量廃棄による水質汚染とCO2排出量は、産業界でワースト2位の規模です。", img: unsplash("1532453288672-3a27e9be9efd") },
-                    { title: "リニアからサーキュラーへ", text: "「作る→使う→捨てる」の一方通行から、資源を循環させる経済モデルへの転換。", img: unsplash("1542601906990-b4d3fb778b09") },
-                    { title: "新素材の開発", text: "キノコ菌糸体やパイナップル葉など、植物由来のヴィーガンレザーの台頭。", img: unsplash("1459411552884-841db9b3cc2a") },
-                    { title: "オンデマンド生産", text: "3Dニットプリンターなどを活用し、注文を受けてから生産することで在庫ロスをゼロに。", img: unsplash("1581091226825-a6a2a5aee158") },
-                    { title: "衣服のデジタルパスポート", text: "QRコードで素材、製造工程、リサイクル方法などの透明性を担保する仕組み。", img: unsplash("1550751827-4bd374c3f58b") },
-                    { title: "古着・リセール市場の拡大", text: "Z世代を中心とした「所有より利用」の価値観シフトと、二次流通プラットフォームの成長。", img: unsplash("1489987707025-afc232f7ea0b") },
-                    { title: "リペア・アップサイクル", text: "修理して長く着る文化の再構築と、廃材を新たな価値ある商品へ生まれ変わらせるデザイン。", img: unsplash("1598532163293-8458643fae5f") },
-                    { title: "エシカル消費の浸透", text: "「誰がどこで作ったか」を重視する消費者の意識変化と、ブランド選定基準。", img: unsplash("1573164713988-8665fc963095") },
-                    { title: "サプライチェーンの透明化", text: "ブロックチェーンを用いたトレーサビリティ管理による、強制労働の排除。", img: unsplash("1566576912902-1d636643d611") },
-                    { title: "未来のクローゼット", text: "物理的な服は最小限にし、デジタルファッション（メタバース用）を楽しむライフスタイル。", img: unsplash("1614850523459-c2f4c699c52e") },
-                ]
-            },
-            'esports-social-impact': {
-                title: "eスポーツの社会的影響",
-                subtitle: "New Career & Community",
-                color: "text-purple-600", bg: "bg-purple-50", accent: "border-purple-600",
-                mainImage: unsplash("1542751371-adc38448a05e"),
-                slides: [
-                    { title: "市場規模の急拡大", text: "世界のeスポーツ視聴者数は5億人を突破。既存のプロスポーツに匹敵するエンタメ産業へ。", img: unsplash("1511512578047-929542ee99d8") },
-                    { title: "新たなキャリアパス", text: "プロ選手だけでなく、ストリーマー、コーチ、アナリスト、イベント運営など職域の多様化。", img: unsplash("1493711662062-fa541adb3fc8") },
-                    { title: "教育分野への活用", text: "戦略的思考、チームワーク、英語力を養うツールとして部活動や授業に導入する学校が増加。", img: unsplash("1531482615713-2afd69097998") },
-                    { title: "高齢者の認知症予防", text: "シニア向けeスポーツ大会の開催。指先と脳を使うことによる健康維持効果。", img: unsplash("1573496359142-b8d87734a5a2") },
-                    { title: "障害者の社会参加", text: "身体的なハンディキャップを超えて対等に競い合える、バリアフリーな競技特性。", img: unsplash("1580894734050-66c3d4111961") },
-                    { title: "地域コミュニティの再生", text: "地方自治体による大会誘致や、地域密着型チームによる地元ファンとの交流。", img: unsplash("1511632765486-a01980978fe2") },
-                    { title: "スポンサーシップの変化", text: "IT企業だけでなく、食品、自動車、金融など非テック系企業の参入が加速。", img: unsplash("1559526324-4b87b5d49e5e") },
-                    { title: "法整備と選手保護", text: "賞金規制の緩和や、未成年選手の長時間プレイ防止など、健全な発展に向けたルール作り。", img: unsplash("1450101499163-c8848c66ca85") },
-                    { title: "メタバースとの融合", text: "観戦体験の進化。VR空間に入り込み、選手の視点で試合を楽しめる次世代配信。", img: unsplash("1592478411213-61535fdd861d") },
-                    { title: "オリンピックへの道", text: "国際的なスポーツ大会への採用検討状況と、バーチャルスポーツの可能性。", img: unsplash("1461896836934-ffe607ba8211") },
-                ]
-            },
-            'smart-city-digital-twin': {
-                title: "デジタルツインが拓くスマートシティ",
-                subtitle: "Urban Optimization Tech",
-                color: "text-indigo-600", bg: "bg-indigo-50", accent: "border-indigo-600",
-                mainImage: unsplash("1477959858617-67f85cf4f1df"),
-                slides: [
-                    { title: "都市のデジタルツインとは", text: "現実の都市空間をサイバー空間上に双子（ツイン）のように完全再現する技術。", img: unsplash("1480714378408-67cf0d13bc1b") },
-                    { title: "交通流の最適化", text: "リアルタイムの渋滞状況を分析し、信号制御をAIが自動化。移動時間を20%短縮。", img: unsplash("1449965408869-eaa3f722e40d") },
-                    { title: "災害シミュレーション", text: "洪水や地震発生時の避難経路をシミュレートし、被害を最小限に抑える都市計画。", img: unsplash("1461353242488-8a041f87a81d") },
-                    { title: "エネルギーマネジメント", text: "ビル群や地域の電力需給を予測・制御し、再生可能エネルギーの利用効率を最大化。", img: unsplash("1473341304177-f26f84058141") },
-                    { title: "インフラ老朽化対策", text: "橋梁やトンネルに設置したセンサーで歪みを検知し、事故前の予防保全を実現。", img: unsplash("1590486803833-1c5dc8ddd4c8") },
-                    { title: "人流データとマーケティング", text: "匿名化された人流データを商業施設の出店計画やイベント開催に活用。", img: unsplash("1465447142348-e9952c393450") },
-                    { title: "市民参画型まちづくり", text: "VR空間で開発後の街並みを市民がプレ体験し、計画段階でフィードバックを反映。", img: unsplash("1531403009284-440f080d1e12") },
-                    { title: "プライバシーガバナンス", text: "カメラやセンサーデータの取り扱いに関する透明性の確保と、監視社会化への懸念払拭。", img: unsplash("1516321497487-e288fb19713f") },
-                    { title: "オープンデータ基盤", text: "行政データを民間に開放し、スタートアップによる新サービス創出を促進。", img: unsplash("1551288049-bebda4e38f71") },
-                    { title: "自律的な都市運営", text: "AIが都市の「OS」となり、清掃、配送、警備などをロボットが自律的に行う未来。", img: unsplash("1485827404703-89b55fcc595e") },
-                ]
-            },
-            'vr-cultural-understanding': {
-                title: "異文化理解を深めるVR体験デザイン",
-                subtitle: "Immersive Cross-Cultural XP",
-                color: "text-violet-600", bg: "bg-violet-50", accent: "border-violet-600",
-                mainImage: unsplash("1555212697-194d092e3b8f"),
-                slides: [
-                    { title: "分断される世界", text: "情報の偏りや物理的な距離により、他者への共感や理解が困難になっている現代社会。", img: unsplash("1529104661501-b663d2e34eff") },
-                    { title: "「体験」としての共感", text: "読む・聞くだけでなく、VRで「当事者視点」を体験することで、深い共感を生み出します。", img: unsplash("1593508512255-86ab42a8e620") },
-                    { title: "難民キャンプの生活体験", text: "国連等が制作した、難民キャンプの日常をVRで体験するプロジェクトの効果検証。", img: unsplash("1469571486292-0ba58a3f068b") },
-                    { title: "言語を超えたコミュニケーション", text: "アバターを通じたジェスチャーや共同作業により、言語の壁を超えた交流を実現。", img: unsplash("1531746790731-6c087fecd65a") },
-                    { title: "歴史的文化遺産の復元", text: "消失した遺跡や建物をVR空間に再現し、往時の文化や生活様式を追体験。", img: unsplash("1524231757912-21f4fe3a7200") },
-                    { title: "ダイバーシティ研修への応用", text: "企業の研修で、ハラスメント被害者やマイノリティの視点をVRで体験し、意識改革を促進。", img: unsplash("1552664730-d307ca884978") },
-                    { title: "学校教育での活用", text: "教科書では伝わらない、世界の祝祭や宗教儀礼を教室にいながら没入体験。", img: unsplash("1427504604405-bef17c0c5861") },
-                    { title: "バイアスの可視化と解消", text: "無意識の偏見（アンコンシャス・バイアス）に気づかせる心理学的なVR実験デザイン。", img: unsplash("1504131584110-306022b9375b") },
-                    { title: "観光プロモーションの新形態", text: "渡航前のプレ体験として、現地の文化やマナーを深く知ってもらうツーリズム。", img: unsplash("1469854523086-cc02fe5d8800") },
-                    { title: "共創する未来", text: "異なる文化背景を持つ人々が、VR空間上で新たな文化や芸術を共に創り上げるプラットフォーム。", img: unsplash("1511632765486-a01980978fe2") },
-                ]
-            },
-            'food-tech': {
-                title: "フードテックの最前線：食糧危機と未来",
-                subtitle: "Future of Food & Agriculture",
-                color: "text-lime-600", bg: "bg-lime-50", accent: "border-lime-600",
-                mainImage: unsplash("1504674900247-0877df9cc836"),
-                slides: [
-                    { title: "2050年食糧危機の予測", text: "世界人口の増加に伴い、タンパク質の需要供給バランスが崩壊する「プロテイン・クライシス」。", img: unsplash("1594771804886-b3a58e085bb9") },
-                    { title: "代替肉（プラントベース）の進化", text: "大豆などを原料とし、味や食感を分子レベルで再現した植物性肉の普及。", img: unsplash("1529312266912-b33cf6227e24") },
-                    { title: "培養肉の技術革新", text: "動物の細胞を培養して肉を作り出す技術。家畜の飼育による環境負荷を劇的に低減。", img: unsplash("1532634917288-0062a3939615") },
-                    { title: "昆虫食の可能性", text: "高タンパク・低環境負荷のスーパーフードとしてのコオロギ等の活用とイメージ変革。", img: unsplash("1587593810167-a649254d97e8") },
-                    { title: "植物工場のスマート化", text: "天候に左右されず、LEDと水耕栽培で安定的に野菜を生産する都市型農業。", img: unsplash("1505935428862-770b6f24f629") },
-                    { title: "フードロス削減テクノロジー", text: "AIによる需要予測や、鮮度保持フィルムの開発による廃棄食料の極小化。", img: unsplash("1530587225148-5c4be431528d") },
-                    { title: "3Dフードプリンター", text: "介護食や個人の栄養状態に合わせた食事を即座に出力するパーソナライズ調理。", img: unsplash("1581091226825-a6a2a5aee158") },
-                    { title: "アグリテック（スマート農業）", text: "ドローンや自動運転トラクターによる農作業の省人化と収穫量最適化。", img: unsplash("1625246333031-40fa730e417a") },
-                    { title: "食のトレーサビリティ", text: "ブロックチェーンにより、産地から食卓までの流通経路を完全に可視化。", img: unsplash("1615811361563-e44b2675d061") },
-                    { title: "サステナブルな食卓", text: "環境に優しく、健康的で、かつ美味しい。倫理的な消費選択が当たり前になる未来。", img: unsplash("1490645935967-10de6ba17061") },
-                ]
+            "future-of-education": {
+                title: "未来の教育：パーソナライズされた学習",
+                category: "Education / AI",
+                desc: "AIが個々に最適化する未来の教育システムを提案。",
+                pdfPath: "assets/sample.pdf" // サンプル用（必要ならファイルを作る）
             }
+            // 他のIDも同様に追加可能
         };
 
-        const currentMeta = presentationsData[presentationId] || presentationsData['music-study'];
+        // DOM要素の取得
+        const data = presentations[presentationId];
+        const titleEl = document.getElementById('p-title');
+        const catEl = document.getElementById('p-category');
+        const descEl = document.getElementById('p-desc');
+        const frameEl = document.getElementById('pdf-frame');
+        const downloadBtn = document.getElementById('btn-download');
 
-        // 文脈に応じた画像のURLリスト（補完用）
-        const genericImages = {
-            'growth': unsplash("1460925895917-afdab827c52f"), // 成長グラフ
-            'risk': unsplash("1454165804606-c3d57bc86b40"), // 書類・リスク
-            'team': unsplash("1522202176988-66273c2fd55f"), // チーム
-            'eco': unsplash("1497436072909-60f360e1d4b0"), // エコ・自然
-            'global': unsplash("1529400971008-5c53d5b9d832"), // 地球儀
-            'roi': unsplash("1579621970563-ebec7560eb3e"), // お金・投資
-            'future': unsplash("1451187580459-43490279c0fa"), // 未来
-        };
+        if (data) {
+            // タイトルなどのテキスト反映
+            document.title = `${data.title} | Portfolio`;
+            titleEl.textContent = data.title;
+            catEl.textContent = data.category;
+            descEl.textContent = data.desc;
 
-        // ▼▼▼ スライドHTML生成ロジック ▼▼▼
-
-        function generateSlides(meta) {
-            const slides = [];
-            
-            // 1. 表紙
-            slides.push(`
-                <div class="flex h-full">
-                    <div class="w-1/2 p-8 md:p-16 flex flex-col justify-center bg-white z-10 relative">
-                        <div class="absolute top-16 left-16 w-12 h-1 bg-gradient-to-r from-gray-800 to-transparent"></div>
-                        <div class="inline-block mb-6 text-sm font-bold tracking-[0.2em] uppercase text-gray-400">Project Proposal</div>
-                        <h1 class="text-2xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">${meta.title}</h1>
-                        <p class="text-lg md:text-xl text-slate-500 font-medium mb-8">${meta.subtitle}</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User">
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-900">Presented by Creator</p>
-                                <p class="text-xs text-slate-500">2024 Portfolio Presentation</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-1/2 bg-gray-100 relative overflow-hidden">
-                        <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[20s] hover:scale-110" style="transform: scale(1.05);" alt="Hero">
-                        <div class="absolute inset-0 bg-slate-900/10"></div>
-                    </div>
-                </div>
-            `);
-
-            // 2. 目次 (20枚分の構成を表示)
-            slides.push(`
-                <div class="h-full p-8 md:p-16 relative overflow-hidden bg-slate-50 flex flex-col justify-center items-center">
-                    <div class="absolute right-0 top-0 w-1/2 h-full bg-white skew-x-12 origin-top-right"></div>
-                    <div class="relative z-10 w-full max-w-5xl">
-                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-8 border-b-4 ${meta.accent} inline-block pb-2">Agenda</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-2 gap-x-8 gap-y-4 text-sm md:text-base">
-                            <div class="space-y-3">
-                                <div class="font-bold text-slate-400 mb-2">PART 1: 現状と提案</div>
-                                ${meta.slides.slice(0, 5).map((s, i) => `<div class="flex gap-3"><span class="${meta.color} font-bold">0${i+1}</span><span class="truncate">${s.title}</span></div>`).join('')}
-                            </div>
-                            <div class="space-y-3">
-                                <div class="font-bold text-slate-400 mb-2">PART 2: 詳細戦略</div>
-                                ${meta.slides.slice(5, 10).map((s, i) => `<div class="flex gap-3"><span class="${meta.color} font-bold">0${i+6}</span><span class="truncate">${s.title}</span></div>`).join('')}
-                            </div>
-                            <div class="space-y-3 mt-4 md:mt-0">
-                                <div class="font-bold text-slate-400 mb-2">PART 3: ビジネス展開</div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">11</span><span>持続的成長戦略</span></div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">12</span><span>リスクマネジメント</span></div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">13</span><span>ステークホルダー</span></div>
-                            </div>
-                            <div class="space-y-3 mt-4 md:mt-0">
-                                <div class="font-bold text-slate-400 mb-2">PART 4: 将来展望</div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">14</span><span>環境への取り組み</span></div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">15</span><span>グローバル展開</span></div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">16</span><span>投資対効果 (ROI)</span></div>
-                                <div class="flex gap-3"><span class="${meta.color} font-bold">17</span><span>今後のロードマップ</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `);
-
-            // 3〜12. 個別コンテンツ (10枚)
-            meta.slides.forEach((slide, index) => {
-                const isEven = index % 2 === 0;
-                slides.push(`
-                    <div class="h-full flex flex-col p-6 md:p-12">
-                        <div class="flex justify-between items-end border-b border-gray-100 pb-4 mb-4 md:mb-6 shrink-0">
-                            <h2 class="text-xl md:text-2xl font-bold ${meta.color} truncate">${slide.title}</h2>
-                            <span class="text-3xl md:text-4xl font-black text-gray-100">0${index + 1}</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full overflow-hidden">
-                            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100 flex flex-col justify-center ${isEven ? 'md:order-1' : 'md:order-2'} order-2">
-                                <h3 class="font-bold text-slate-800 mb-4 text-lg md:text-xl">Key Insight</h3>
-                                <p class="text-slate-600 leading-relaxed mb-6 text-sm md:text-lg">
-                                    ${slide.text}
-                                </p>
-                                <ul class="space-y-2 md:space-y-3 mt-auto hidden md:block">
-                                    <li class="flex items-start gap-3 text-sm text-slate-500">
-                                        <svg class="w-5 h-5 ${meta.color} shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span>重要課題として抽出済み</span>
-                                    </li>
-                                    <li class="flex items-start gap-3 text-sm text-slate-500">
-                                        <svg class="w-5 h-5 ${meta.color} shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        <span>検証可能なデータに基づく</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="rounded-xl overflow-hidden shadow-lg relative group border border-gray-200 ${isEven ? 'md:order-2' : 'md:order-1'} order-1 h-48 md:h-auto">
-                                <img src="${slide.img}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" alt="${slide.title}">
-                                <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            });
-
-            // 13〜19. 共通展開スライド (自動生成 7枚)
-            const commonSlides = [
-                { t: "持続的成長戦略", d: "市場の変化に柔軟に対応し、長期的な競争優位性を確立するためのスケーリング戦略。", i: genericImages.growth },
-                { t: "リスクマネジメント", d: "法的規制、技術的負債、市場変動など、想定されるリスク要因への具体的な対策。", i: genericImages.risk },
-                { t: "ステークホルダー分析", d: "顧客、投資家、パートナー企業、地域社会への価値提供と信頼関係の構築。", i: genericImages.team },
-                { t: "環境への取り組み", d: "SDGsの観点から、事業活動を通じた環境負荷低減と社会貢献の実現。", i: genericImages.eco },
-                { t: "グローバル展開", d: "国内市場での成功モデルをベースとした、海外拠点への展開ロードマップ。", i: genericImages.global },
-                { t: "投資対効果 (ROI)", d: "初期投資の回収期間シミュレーションと、3年後までの収益予測。", i: genericImages.roi },
-                { t: "今後の展望", d: "テクノロジーの進化を見据えた、次フェーズでの機能拡張と新サービス構想。", i: genericImages.future },
-            ];
-
-            commonSlides.forEach((slide, index) => {
-                const pageNum = index + 11;
-                slides.push(`
-                    <div class="h-full flex flex-col p-6 md:p-12">
-                        <div class="flex justify-between items-end border-b border-gray-100 pb-4 mb-6 shrink-0">
-                            <h2 class="text-xl md:text-2xl font-bold ${meta.color}">${slide.t}</h2>
-                            <span class="text-3xl md:text-4xl font-black text-gray-100">${pageNum}</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-                            <div class="rounded-xl overflow-hidden relative h-48 md:h-auto">
-                                <img src="${slide.i}" class="w-full h-full object-cover" alt="${slide.t}">
-                                <div class="absolute bottom-4 left-4 bg-white/90 px-3 py-1 text-xs font-bold rounded">Strategic Overview</div>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <h3 class="text-lg font-bold text-slate-800 mb-3">戦略的アプローチ</h3>
-                                <p class="text-slate-600 leading-relaxed mb-6">${slide.d}</p>
-                                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                                    <div class="flex justify-between text-sm mb-2">
-                                        <span class="font-bold text-slate-500">達成度予測</span>
-                                        <span class="font-bold ${meta.color}">85%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-slate-400 h-2 rounded-full" style="width: 85%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            });
-
-            // 20. サンクス
-            slides.push(`
-                <div class="flex flex-col justify-center items-center h-full text-center relative overflow-hidden bg-slate-900 text-white">
-                    <img src="${meta.mainImage}" class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm">
-                    <div class="relative z-10 max-w-2xl px-6">
-                        <h2 class="text-4xl md:text-6xl font-black mb-8 tracking-tight">Thank You.</h2>
-                        <p class="text-slate-300 mb-12 text-base md:text-xl leading-relaxed">
-                            ご清聴ありがとうございました。<br>
-                            本プロジェクトの詳細な資料については、<br>下記よりお気軽にお問い合わせください。
-                        </p>
-                        <a href="index.html#contact" class="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition shadow-xl hover:scale-105 duration-300">
-                            <span>お問い合わせはこちら</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            `);
-
-            return slides;
+            // PDFのパスを設定
+            frameEl.src = data.pdfPath;
+            downloadBtn.href = data.pdfPath;
+        } else {
+            // データがない場合のエラー表示
+            titleEl.textContent = "資料が見つかりません";
+            catEl.textContent = "Error";
+            descEl.textContent = "URLが正しいかご確認ください。";
+            downloadBtn.style.display = 'none';
         }
-
-        // ▼▼▼ 表示制御・イベント処理 ▼▼▼
-
-        const slidesData = generateSlides(currentMeta);
-        let currentIndex = 0;
-
-        const slideViewer = document.getElementById('slide-viewer');
-        const prevBtnNav = document.getElementById('nav-prev-btn'); // 画面左ボタン
-        const nextBtnNav = document.getElementById('nav-next-btn'); // 画面右ボタン
-        const counter = document.getElementById('slide-counter');
-        const progressBar = document.getElementById('progress-bar');
-        const footerCounter = document.getElementById('current-slide-footer');
-        const footerTitle = document.getElementById('footer-title');
-        const titleEl = document.getElementById('presentation-title');
-
-        titleEl.textContent = currentMeta.title;
-        footerTitle.textContent = currentMeta.subtitle;
-        document.title = `${currentMeta.title} | Slide Viewer`;
-
-        function updateSlide() {
-            slideViewer.style.opacity = '0';
-            
-            setTimeout(() => {
-                slideViewer.innerHTML = slidesData[currentIndex];
-                slideViewer.style.opacity = '1';
-                
-                counter.textContent = `${currentIndex + 1} / ${slidesData.length}`;
-                footerCounter.textContent = String(currentIndex + 1).padStart(2, '0');
-                
-                const progress = ((currentIndex + 1) / slidesData.length) * 100;
-                progressBar.style.width = `${progress}%`;
-
-                // ボタンの有効・無効切り替え
-                const isStart = currentIndex === 0;
-                const isEnd = currentIndex === slidesData.length - 1;
-                
-                prevBtnNav.disabled = isStart;
-                prevBtnNav.style.opacity = isStart ? '0' : '1';
-                
-                nextBtnNav.disabled = isEnd;
-                nextBtnNav.style.opacity = isEnd ? '0' : '1';
-
-            }, 200);
-        }
-
-        updateSlide();
-
-        // 1. ボタン操作 (画面左右の矢印)
-        const goPrev = () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlide();
-            }
-        };
-        const goNext = () => {
-            if (currentIndex < slidesData.length - 1) {
-                currentIndex++;
-                updateSlide();
-            }
-        };
-
-        prevBtnNav.addEventListener('click', goPrev);
-        nextBtnNav.addEventListener('click', goNext);
-
-        // 2. キーボード操作
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') goNext();
-            else if (e.key === 'ArrowLeft') goPrev();
-        });
-
-        // 3. スマホ用スワイプ操作
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 50) goNext(); // 左へスワイプ
-            if (touchEndX > touchStartX + 50) goPrev(); // 右へスワイプ
-        }, { passive: true });
-
     </script>
 </body>
 </html>
