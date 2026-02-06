@@ -100,21 +100,68 @@
         const presentationId = urlParams.get('id');
 
         // 資料データ定義
-        const presentations = {
-            "music-study": {
-                title: "流麗な音楽スタディで目指せるスライド",
-                category: "Music / Education",
-                desc: "音楽理論と感性を融合させ、論理的かつ情緒的に伝えるためのプレゼンテーション。",
-                pdfPath: "assets/music-study.pdf" 
-            },
-            "future-of-education": {
-                title: "未来の教育：パーソナライズされた学習",
-                category: "Education / AI",
-                desc: "AIが個々に最適化する未来の教育システムを提案。",
-                pdfPath: "assets/future-of-education.pdf" // サンプルのため同じファイルを指定
-            }
-            // 必要に応じて追加
-        };
+const presentations = {
+    "music-study": {
+        title: "流麗な音楽スタディで目指せるスライド",
+        category: "Music / Education",
+        desc: "音楽をテーマにした魅力的で流麗なプレゼンテーションデザインについて。",
+        pdfPath: "assets/music-study.pdf"
+    },
+    "future-of-education": {
+        title: "未来の教育：パーソナライズされた学習体験のデザイン",
+        category: "Education / AI",
+        desc: "AIが個々に最適化する未来の教育システムを提案。",
+        pdfPath: "assets/future-of-education.pdf"
+    },
+    "local-digital-marketing": {
+        title: "地方創生と伝統工芸のデジタルマーケティング戦略",
+        category: "Regional Revitalization / Marketing",
+        desc: "伝統工芸をデジタルで世界に。成功戦略と具体的施策。",
+        pdfPath: "assets/local-digital-marketing.pdf"
+    },
+    "space-business": {
+        title: "宇宙ビジネスの新たなフロンティア：月面資源開発の可能性",
+        category: "Space / Business",
+        desc: "月面資源開発の技術、経済、国際協力の可能性を探る。",
+        pdfPath: "assets/space-business.pdf"
+    },
+    "health-tech": {
+        title: "ヘルステックの進化：予防医療と個別化された健康管理",
+        category: "Medical / Healthcare",
+        desc: "ウェアラブル、AI診断で実現する未来の医療システム。",
+        pdfPath: "assets/health-tech.pdf"
+    },
+    "sustainable-fashion": {
+        title: "サステナブルファッションの挑戦：循環型経済への転換",
+        category: "Fashion / Sustainability",
+        desc: "ファッション業界が持続可能なビジネスモデルへ。",
+        pdfPath: "assets/sustainable-fashion.pdf"
+    },
+    "esports-social-impact": {
+        title: "eスポーツの社会的影響：新たなキャリアとコミュニティ形成",
+        category: "eSports / Society",
+        desc: "eスポーツが若者に与える影響、キャリア、社会性。",
+        pdfPath: "assets/esports-social-impact.pdf"
+    },
+    "smart-city-digital-twin": {
+        title: "デジタルツインが拓くスマートシティの未来",
+        category: "Urban Development / Technology",
+        desc: "デジタルツインで都市を最適化。スマートシティの可能性。",
+        pdfPath: "assets/smart-city-digital-twin.pdf"
+    },
+    "vr-cultural-understanding": {
+        title: "異文化理解を深めるVR体験デザイン",
+        category: "VR / Culture",
+        desc: "VRで没入する異文化体験、教育・ビジネスへの応用。",
+        pdfPath: "assets/vr-cultural-understanding.pdf"
+    },
+    "food-tech": {
+        title: "フードテックの最前線：食糧危機と未来の食卓",
+        category: "Food / Technology",
+        desc: "代替肉、植物工場など、食糧危機を乗り越える技術。",
+        pdfPath: "assets/food-tech.pdf"
+    }
+};
 
         const data = presentations[presentationId];
         
